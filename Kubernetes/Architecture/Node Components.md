@@ -40,32 +40,17 @@ The kubelet is the **primary node agent**. It runs on every node and is responsi
 
 When the kubelet receives a new PodSpec:
 
-```
-  PodSpec received from apiserver
-       |
-       v
-  1. Admit the Pod (check resource limits, node affinity, etc.)
-       |
-       v
-  2. Create the Pod sandbox (network namespace via CNI)
-       |
-       v
-  3. Pull container images (if not cached)
-       |
-       v
-  4. Create and start init containers (sequentially)
-       |
-       v
-  5. Create and start app containers (in parallel)
-       |
-       v
-  6. Run probes (startup -> liveness + readiness)
-       |
-       v
-  7. Report Pod status to apiserver
-       |
-       v
-  8. Continue monitoring (restart on failure per restartPolicy)
+```mermaid
+flowchart TD
+    A[PodSpec received from apiserver]
+    A --> B["1. Admit the Pod<br>(check resource limits, node affinity, etc.)"]
+    B --> C["2. Create the Pod sandbox<br>(network namespace via CNI)"]
+    C --> D["3. Pull container images<br>(if not cached)"]
+    D --> E["4. Create and start init containers<br>(sequentially)"]
+    E --> F["5. Create and start app containers<br>(in parallel)"]
+    F --> G["6. Run probes<br>(startup → liveness + readiness)"]
+    G --> H[7. Report Pod status to apiserver]
+    H --> I["8. Continue monitoring<br>(restart on failure per restartPolicy)"]
 ```
 
 ### Health Checking (Probes)
@@ -115,9 +100,10 @@ kube-proxy runs on every node and implements **Service networking**. It watches 
 
 ### How It Works
 
-```
-  Client Pod  ──>  ClusterIP:port  ──>  kube-proxy rules  ──>  Backend Pod IP:port
-                   (virtual IP)         (iptables/IPVS)        (actual Pod)
+```mermaid
+graph LR
+    A[Client Pod] -->|"ClusterIP:port<br>(virtual IP)"| B["kube-proxy rules<br>(iptables/IPVS)"]
+    B -->|"Backend Pod IP:port<br>(actual Pod)"| C[Backend Pod]
 ```
 
 kube-proxy does not proxy traffic itself in the default mode. It configures kernel-level rules that handle the forwarding.
