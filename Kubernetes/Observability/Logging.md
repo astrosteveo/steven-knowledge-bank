@@ -134,25 +134,14 @@ Kubernetes recommends four patterns:
 
 The most common and recommended approach. A logging agent runs as a DaemonSet on every node, reads log files from `/var/log/containers/`, and ships them to a backend.
 
-```
-  Node
-  ┌─────────────────────────────────────────────┐
-  │                                               │
-  │  ┌─── Pod A ───┐    ┌─── Pod B ───┐          │
-  │  │ stdout/stderr│    │ stdout/stderr│          │
-  │  └──────┬───────┘    └──────┬───────┘          │
-  │         │                    │                  │
-  │         ▼                    ▼                  │
-  │    /var/log/containers/*.log                    │
-  │         │                                       │
-  │  ┌──────▼──────────────────┐                    │
-  │  │ Logging Agent (DaemonSet)│                   │
-  │  │ e.g., Fluent Bit         │                   │
-  │  └──────────┬──────────────┘                    │
-  └─────────────┼───────────────────────────────────┘
-                │
-                ▼
-        Log Backend (Elasticsearch, Loki, etc.)
+```mermaid
+flowchart TD
+    subgraph Node
+        PodA["Pod A\nstdout/stderr"] --> LogFiles["/var/log/containers/*.log"]
+        PodB["Pod B\nstdout/stderr"] --> LogFiles
+        LogFiles --> Agent["Logging Agent DaemonSet\ne.g., Fluent Bit"]
+    end
+    Agent --> Backend["Log Backend\n(Elasticsearch, Loki, etc.)"]
 ```
 
 **Pros:** No application changes needed. Low resource overhead per node. Works for all Pods automatically.

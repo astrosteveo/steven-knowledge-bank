@@ -217,28 +217,11 @@ VPA is not installed by default. It requires deploying the VPA components separa
 
 The Cluster Autoscaler adjusts the **number of nodes** in a cluster. It works with cloud-provider-managed node groups (AWS Auto Scaling Groups, GCP Managed Instance Groups, Azure VM Scale Sets).
 
-```
-Cluster Autoscaler Flow
-
-                  Pod stuck in
-                  Pending state
-                       │
-                       ▼
-              ┌──────────────────┐
-              │ Cluster Autoscaler│
-              │ detects unschedulable│
-              │ Pods              │
-              └────────┬─────────┘
-                       │
-           ┌───────────┴───────────┐
-           ▼                       ▼
-   ┌──────────────┐       ┌──────────────┐
-   │  Scale Up    │       │  Scale Down  │
-   │              │       │              │
-   │ Add nodes to │       │ Remove under-│
-   │ accommodate  │       │ utilized     │
-   │ pending Pods │       │ nodes        │
-   └──────────────┘       └──────────────┘
+```mermaid
+flowchart TD
+    Pending["Pod stuck in\nPending state"] --> CA["Cluster Autoscaler\ndetects unschedulable Pods"]
+    CA --> Up["Scale Up\n\nAdd nodes to\naccommodate\npending Pods"]
+    CA --> Down["Scale Down\n\nRemove under-\nutilized nodes"]
 ```
 
 ### How It Works
