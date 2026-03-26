@@ -171,15 +171,17 @@ stateDiagram-v2
 
 **Dynamic provisioning**: no pre-created PVs are needed. When a PVC references a StorageClass, Kubernetes automatically provisions the underlying storage and creates a PV. This is the preferred approach.
 
-```
-Static:
-  Admin creates PV ──► PVC binds to existing PV
-
-Dynamic:
-  PVC references StorageClass ──► StorageClass triggers provisioner
-                                  ──► Provisioner creates storage
-                                  ──► Kubernetes creates PV
-                                  ──► PVC binds to new PV
+```mermaid
+graph LR
+    subgraph Static
+        A1[Admin creates PV] --> A2[PVC binds to existing PV]
+    end
+    subgraph Dynamic
+        B1[PVC references StorageClass] --> B2[StorageClass triggers provisioner]
+        B2 --> B3[Provisioner creates storage]
+        B3 --> B4[Kubernetes creates PV]
+        B4 --> B5[PVC binds to new PV]
+    end
 ```
 
 ## Using PVCs in Pod Specs

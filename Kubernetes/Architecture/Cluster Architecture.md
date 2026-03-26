@@ -94,16 +94,12 @@ All communication uses **mutual TLS** (mTLS). The apiserver validates client cer
 
 ### Single Master
 
-```
-  +------------------+
-  | Control Plane    |    Single point of failure.
-  | (1 node)         |    Suitable for development,
-  | apiserver + etcd |    learning, and testing only.
-  +--------+---------+
-           |
-    +------+------+
-    |      |      |
-  node1  node2  node3
+```mermaid
+graph TD
+    CP["Control Plane (1 node)<br>apiserver + etcd<br><i>Single point of failure.<br>Suitable for dev/test only.</i>"]
+    CP --> node1
+    CP --> node2
+    CP --> node3
 ```
 
 - Simple to set up and maintain.

@@ -11,15 +11,14 @@ topic: Security
 
 A **service account** provides an identity for processes running inside a Pod. When a Pod makes API calls to the Kubernetes API server, it authenticates as its service account. Unlike User accounts (which are for humans and managed externally), service accounts are Kubernetes API objects -- namespaced, managed by the cluster, and intended for workloads.
 
-```
-  +------------------+
-  |      Pod         |
-  |                  |       authenticated as
-  |  app container --+-----> system:serviceaccount:dev:my-app
-  |                  |
-  |  projected token |       kube-apiserver checks RBAC:
-  |  (mounted vol)   |       "Can this SA do X on resource Y?"
-  +------------------+
+```mermaid
+graph LR
+    subgraph Pod
+        App["app container"]
+        Token["projected token\n(mounted vol)"]
+    end
+    App -->|authenticated as| SA["system:serviceaccount:dev:my-app"]
+    SA --> RBAC["kube-apiserver checks RBAC:\nCan this SA do X on resource Y?"]
 ```
 
 ## Default Service Account

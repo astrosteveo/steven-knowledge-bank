@@ -11,11 +11,14 @@ topic: Workloads
 
 A Deployment is the standard way to run stateless applications in Kubernetes. It manages a hierarchy:
 
-```
-Deployment
-├── ReplicaSet (revision 3, active) ──► Pod, Pod, Pod
-├── ReplicaSet (revision 2, scaled to 0)
-└── ReplicaSet (revision 1, scaled to 0)
+```mermaid
+graph TD
+    D[Deployment] --> RS3["ReplicaSet (revision 3, active)"]
+    D --> RS2["ReplicaSet (revision 2, scaled to 0)"]
+    D --> RS1["ReplicaSet (revision 1, scaled to 0)"]
+    RS3 --> P1[Pod]
+    RS3 --> P2[Pod]
+    RS3 --> P3[Pod]
 ```
 
 The Deployment controller creates and manages **ReplicaSets**, which in turn manage **Pods**. When you update a Deployment (e.g., change the container image), the Deployment creates a new ReplicaSet and gradually scales it up while scaling the old one down.
