@@ -1,0 +1,13 @@
+# Obsidian workspace/cache (changes constantly, not worth tracking)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/graph.json
+
+# Plugin caches
+.obsidian/plugins/omnisearch/
+.obsidian/plugins/obsidian-local-rest-api/data.json
+
+# OS files
+.DS_Store
+.trash/
