@@ -11,22 +11,21 @@ topic: Observability
 
 Kubernetes monitoring is built on a pipeline that collects metrics at different levels and aggregates them for querying and alerting.
 
-```
-  Container Level          Node Level           Cluster Level
-  ┌─────────────┐     ┌──────────────┐     ┌──────────────────────┐
-  │   cAdvisor   │────►│ metrics-server│────►│  kubectl top          │
-  │ (in kubelet) │     │ (aggregator)  │     │  HPA decisions        │
-  └─────────────┘     └──────────────┘     └──────────────────────┘
-         │
-         │ also scraped by
-         ▼
-  ┌──────────────┐     ┌───────────────┐     ┌───────────────┐
-  │  Prometheus   │────►│   Grafana      │     │ Alertmanager  │
-  │ (scrapes all  │     │ (dashboards)   │     │ (notifications)│
-  │  /metrics)    │────►│               │     │               │
-  └──────────────┘     └───────────────┘     └───────────────┘
-         │
-         └──────────────────────────────────────►│ Alertmanager │
+```mermaid
+flowchart LR
+    subgraph Container Level
+        cAdvisor["cAdvisor\n(in kubelet)"]
+    end
+    subgraph Node Level
+        MetricsServer["metrics-server\n(aggregator)"]
+    end
+    subgraph Cluster Level
+        KubectlTop["kubectl top\nHPA decisions"]
+    end
+    cAdvisor --> MetricsServer --> KubectlTop
+    cAdvisor -- also scraped by --> Prometheus["Prometheus\n(scrapes all /metrics)"]
+    Prometheus --> Grafana["Grafana\n(dashboards)"]
+    Prometheus --> Alertmanager["Alertmanager\n(notifications)"]
 ```
 
 ### cAdvisor

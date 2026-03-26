@@ -11,18 +11,9 @@ topic: Operations
 
 The standard workflow for performing maintenance on a node (OS updates, kernel patches, hardware repairs) follows a predictable pattern:
 
-```
-Node Maintenance Workflow
-
-1. Cordon          2. Drain           3. Maintain         4. Uncordon
-┌──────────┐     ┌──────────┐      ┌──────────┐       ┌──────────┐
-│ Mark node │     │ Evict    │      │ Perform  │       │ Mark node│
-│ as un-    │────▶│ all pods │────▶ │ OS/HW    │────▶  │ as       │
-│ schedulable│    │ safely   │      │ work     │       │ schedulable│
-└──────────┘     └──────────┘      └──────────┘       └──────────┘
-                  Respects PDBs                        Pods can be
-                  and graceful                         scheduled
-                  termination                          here again
+```mermaid
+flowchart LR
+    A["1. Cordon\n\nMark node as\nunschedulable"] --> B["2. Drain\n\nEvict all pods safely\n\nRespects PDBs and\ngraceful termination"] --> C["3. Maintain\n\nPerform OS/HW\nwork"] --> D["4. Uncordon\n\nMark node as\nschedulable\n\nPods can be\nscheduled here again"]
 ```
 
 ## Cordoning and Uncordoning Nodes

@@ -56,37 +56,14 @@ Common operations map to HTTP methods:
 
 Every request passes through a well-defined pipeline:
 
-```
-  Client Request
-       |
-       v
-  +----+----+
-  | AuthN   |  Who are you? (certificates, tokens, OIDC, etc.)
-  +---------+
-       |
-       v
-  +----+----+
-  | AuthZ   |  Are you allowed? (RBAC, ABAC, Webhook, Node)
-  +---------+
-       |
-       v
-  +----+--------+
-  | Admission   |  Should this be modified or rejected?
-  | Controllers |  (Mutating webhooks -> Validating webhooks)
-  +-------------+
-       |
-       v
-  +----+--------+
-  | Validation  |  Is the object schema valid?
-  +-------------+
-       |
-       v
-  +----+----+
-  | etcd    |  Persist the object
-  +---------+
-       |
-       v
-  Response to client
+```mermaid
+flowchart TD
+    A[Client Request] --> B["AuthN<br><i>Who are you? (certificates, tokens, OIDC, etc.)</i>"]
+    B --> C["AuthZ<br><i>Are you allowed? (RBAC, ABAC, Webhook, Node)</i>"]
+    C --> D["Admission Controllers<br><i>Should this be modified or rejected?<br>(Mutating webhooks → Validating webhooks)</i>"]
+    D --> E["Validation<br><i>Is the object schema valid?</i>"]
+    E --> F["etcd<br><i>Persist the object</i>"]
+    F --> G[Response to client]
 ```
 
 ### Authentication Methods
@@ -197,27 +174,13 @@ The scheduler watches for newly created Pods with no assigned node and selects t
 
 ### How Scheduling Works
 
-```
-  Unscheduled Pod (spec.nodeName is empty)
-       |
-       v
-  +----+-------+
-  | Filtering  |  Remove nodes that cannot run the Pod.
-  | (Predicates)|  Result: list of feasible nodes.
-  +-------------+
-       |
-       v
-  +----+------+
-  | Scoring   |  Rank the remaining nodes 0-100.
-  | (Priorities)|  Higher score = better fit.
-  +------------+
-       |
-       v
-  Select the node with the highest score
-  (ties broken randomly)
-       |
-       v
-  Write spec.nodeName on the Pod object via apiserver
+```mermaid
+flowchart TD
+    A["Unscheduled Pod<br>(spec.nodeName is empty)"]
+    A --> B["Filtering (Predicates)<br><i>Remove nodes that cannot run the Pod.<br>Result: list of feasible nodes.</i>"]
+    B --> C["Scoring (Priorities)<br><i>Rank the remaining nodes 0-100.<br>Higher score = better fit.</i>"]
+    C --> D["Select the node with the highest score<br>(ties broken randomly)"]
+    D --> E["Write spec.nodeName on the Pod object<br>via apiserver"]
 ```
 
 ### Filtering Phase (Predicates)
