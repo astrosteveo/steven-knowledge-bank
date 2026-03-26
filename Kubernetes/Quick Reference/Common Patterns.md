@@ -319,19 +319,10 @@ spec:
 
 Run two identical environments (blue and green). Only one receives live traffic at a time. Switch traffic by updating the Service selector.
 
-```
-  ┌──────────────────┐
-  │     Service      │
-  │  selector:       │
-  │    version: green│─ ─ ─ ┐
-  └──────────────────┘      │
-                            │
-  ┌────────────┐     ┌─────▼──────┐
-  │ blue (old) │     │ green (new)│
-  │ Deployment │     │ Deployment │
-  │ version:   │     │ version:   │
-  │   blue     │     │   green    │
-  └────────────┘     └────────────┘
+```mermaid
+flowchart TD
+    Svc["Service\nselector: version: green"] -.->|inactive| Blue["blue (old)\nDeployment\nversion: blue"]
+    Svc -->|active| Green["green (new)\nDeployment\nversion: green"]
 ```
 
 **Both Deployments share the same app label but differ by version:**

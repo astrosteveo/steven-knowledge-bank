@@ -295,18 +295,22 @@ The cloud-controller-manager (CCM) separates cloud-provider-specific logic from 
 
 ### Architecture
 
-```
-  kube-controller-manager                cloud-controller-manager
-  (cloud-independent)                    (cloud-specific)
-  +---------------------+               +---------------------+
-  | Deployment ctrl     |               | Node ctrl (cloud)   |
-  | ReplicaSet ctrl     |               | Route ctrl          |
-  | Job ctrl            |               | Service LB ctrl     |
-  | ...                 |               +----------+----------+
-  +---------------------+                          |
-                                                   v
-                                            Cloud Provider API
-                                            (AWS, GCP, Azure)
+```mermaid
+flowchart LR
+    subgraph KCM["kube-controller-manager<br>(cloud-independent)"]
+        DC[Deployment ctrl]
+        RSC[ReplicaSet ctrl]
+        JC[Job ctrl]
+        ETC["..."]
+    end
+
+    subgraph CCM["cloud-controller-manager<br>(cloud-specific)"]
+        NC["Node ctrl (cloud)"]
+        RC[Route ctrl]
+        SLC[Service LB ctrl]
+    end
+
+    CCM --> CLOUD["Cloud Provider API<br>(AWS, GCP, Azure)"]
 ```
 
 ### Running the CCM
