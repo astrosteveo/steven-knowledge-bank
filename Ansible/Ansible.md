@@ -1,55 +1,74 @@
+---
+tags:
+  - ansible
+  - MOC
+topic: Ansible
+---
+
 # Ansible Handbook
 
 A quick reference guide covering the core concepts and patterns you need to work with Ansible day to day. Sourced from the official Ansible documentation.
 
 ## Getting Started
 
-- [[Core Concepts]]
-- [[Installation]]
+```dataview
+LIST
+FROM #ansible/getting-started
+SORT file.name ASC
+```
 
 ## Infrastructure
 
-- [[Inventory]]
-- [[Configuration]]
-- [[Vault]]
+```dataview
+LIST
+FROM #ansible/infrastructure
+SORT file.name ASC
+```
 
 ## Playbooks
 
-- [[Playbooks]]
-- [[Handlers]]
-- [[Conditionals and Loops]]
-- [[Templates]]
-- [[Tags]]
-- [[Error Handling]]
+```dataview
+LIST
+FROM #ansible/playbooks
+SORT file.name ASC
+```
 
 ## Organization
 
-- [[Roles]]
-- [[Collections]]
-- [[Ansible Galaxy]]
+```dataview
+LIST
+FROM #ansible/organization
+SORT file.name ASC
+```
 
 ## Variables and Facts
 
-- [[Variables]]
-- [[Facts]]
-- [[Environment Variables]]
+```dataview
+LIST
+FROM #ansible/variables
+SORT file.name ASC
+```
 
 ## Execution
 
-- [[Ad-Hoc Commands]]
-- [[Privilege Escalation]]
-- [[Delegation]]
-- [[Serial and Rolling Updates]]
-- [[Async Tasks]]
+```dataview
+LIST
+FROM #ansible/execution
+SORT file.name ASC
+```
 
 ## Development
 
-- [[Debugging]]
-- [[Ansible Lint]]
-- [[Common Beginner Mistakes]]
+```dataview
+LIST
+FROM #ansible/development
+SORT file.name ASC
+```
 
 ## Quick Reference
 
-- [[Project Layout]]
-- [[Common Modules]]
-- [[CLI Tools]]
+```dataview
+LIST
+FROM #ansible/reference
+SORT file.name ASC
+```
