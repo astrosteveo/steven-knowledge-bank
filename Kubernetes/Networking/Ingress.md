@@ -11,24 +11,12 @@ topic: Networking
 
 An Ingress is a Kubernetes API object that manages **external HTTP and HTTPS access to Services** within the cluster. It provides URL-based routing, SSL/TLS termination, and name-based virtual hosting — capabilities that a plain LoadBalancer Service cannot offer.
 
-```
-                        Internet
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │   Ingress   │
-                    │  Controller │
-                    │  (NGINX,    │
-                    │   Traefik)  │
-                    └──────┬──────┘
-              ┌────────────┼────────────┐
-              │            │            │
-       /api/*        /web/*       /docs/*
-              │            │            │
-              ▼            ▼            ▼
-         ┌─────────┐ ┌─────────┐ ┌─────────┐
-         │ api-svc │ │ web-svc │ │ doc-svc │
-         └─────────┘ └─────────┘ └─────────┘
+```mermaid
+graph TD
+    Internet --> IC["Ingress Controller\n(NGINX, Traefik)"]
+    IC -->|"/api/*"| API["api-svc"]
+    IC -->|"/web/*"| WEB["web-svc"]
+    IC -->|"/docs/*"| DOC["doc-svc"]
 ```
 
 ## Ingress vs LoadBalancer Services
@@ -383,26 +371,11 @@ The **Gateway API** is a collection of newer Kubernetes resources (`Gateway`, `H
 
 ### Gateway API Resource Model
 
-```
-┌──────────────────┐
-│  GatewayClass    │   Infrastructure provider defines this
-│  (like           │   (analogous to IngressClass)
-│   StorageClass)  │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│    Gateway       │   Cluster operator configures listeners
-│  (listeners,     │   (ports, protocols, TLS)
-│   addresses)     │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│   HTTPRoute /    │   Application developer defines routing
-│   GRPCRoute /    │   (hosts, paths, headers, backends)
-│   TCPRoute       │
-└──────────────────┘
+```mermaid
+graph TD
+    GC["GatewayClass\n(like StorageClass)"] -->|"Infrastructure provider\ndefines this"| GW["Gateway\n(listeners, addresses)"]
+    GW -->|"Cluster operator\nconfigures listeners"| RT["HTTPRoute / GRPCRoute / TCPRoute"]
+    RT -.-|"Application developer\ndefines routing"| RT
 ```
 
 ### Basic HTTPRoute Example

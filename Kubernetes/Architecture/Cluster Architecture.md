@@ -11,41 +11,47 @@ topic: Architecture
 
 A Kubernetes cluster is divided into two logical layers: the **control plane** (manages the cluster) and the **data plane** (runs the workloads). Every cluster has at least one control plane node and one or more worker nodes.
 
-```
-                         +-----------------------------------------+
-                         |           CONTROL PLANE                 |
-                         |                                         |
-                         |  +-------------+   +----------------+   |
-                         |  | kube-apiserver|  |     etcd       |   |
-                         |  +------+------+   +----------------+   |
-                         |         |                                |
-                         |  +------+------+   +------------------+ |
-                         |  | kube-scheduler|  | controller-manager| |
-                         |  +-------------+   +------------------+ |
-                         |         |                                |
-                         |  +------+---------------------------+   |
-                         |  | cloud-controller-manager (optional)| |
-                         |  +----------------------------------+   |
-                         +-----------------+-----------------------+
-                                           |
-                            kubectl / API requests
-                                           |
-              +----------------------------+----------------------------+
-              |                            |                            |
-   +----------+----------+     +----------+----------+     +-----------+---------+
-   |    WORKER NODE 1    |     |    WORKER NODE 2    |     |    WORKER NODE N    |
-   |                     |     |                     |     |                     |
-   | +-------+ +-------+ |     | +-------+ +-------+ |     | +-------+ +-------+ |
-   | |kubelet| |kube-  | |     | |kubelet| |kube-  | |     | |kubelet| |kube-  | |
-   | |       | |proxy  | |     | |       | |proxy  | |     | |       | |proxy  | |
-   | +-------+ +-------+ |     | +-------+ +-------+ |     | +-------+ +-------+ |
-   |                     |     |                     |     |                     |
-   | +--container-----+ |     | +--container-----+ |     | +--container-----+ |
-   | |  runtime (CRI) | |     | |  runtime (CRI) | |     | |  runtime (CRI) | |
-   | +----------------+ |     | +----------------+ |     | +----------------+ |
-   |                     |     |                     |     |                     |
-   | [ Pod ] [ Pod ]     |     | [ Pod ] [ Pod ]     |     | [ Pod ] [ Pod ]     |
-   +---------------------+     +---------------------+     +---------------------+
+```mermaid
+flowchart TD
+    subgraph CP["CONTROL PLANE"]
+        API[kube-apiserver]
+        ETCD[etcd]
+        SCHED[kube-scheduler]
+        CM[controller-manager]
+        CCM["cloud-controller-manager (optional)"]
+        API --- ETCD
+        API --- SCHED
+        API --- CM
+        API --- CCM
+    end
+
+    CP -->|"kubectl / API requests"| W1
+    CP -->|"kubectl / API requests"| W2
+    CP -->|"kubectl / API requests"| WN
+
+    subgraph W1["WORKER NODE 1"]
+        K1[kubelet] & KP1[kube-proxy]
+        CRI1["container runtime (CRI)"]
+        POD1A["Pod"] & POD1B["Pod"]
+        K1 & KP1 --> CRI1
+        CRI1 --> POD1A & POD1B
+    end
+
+    subgraph W2["WORKER NODE 2"]
+        K2[kubelet] & KP2[kube-proxy]
+        CRI2["container runtime (CRI)"]
+        POD2A["Pod"] & POD2B["Pod"]
+        K2 & KP2 --> CRI2
+        CRI2 --> POD2A & POD2B
+    end
+
+    subgraph WN["WORKER NODE N"]
+        KN[kubelet] & KPN[kube-proxy]
+        CRIN["container runtime (CRI)"]
+        PODNA["Pod"] & PODNB["Pod"]
+        KN & KPN --> CRIN
+        CRIN --> PODNA & PODNB
+    end
 ```
 
 ## Control Plane vs Data Plane
@@ -64,16 +70,14 @@ An important nuance: if the control plane goes down, already-running Pods contin
 
 All communication flows through the **kube-apiserver** as a central hub. No component talks directly to another.
 
-```
-  kubelet ──────┐
-                │
-  kube-proxy ───┤
-                │         ┌──────────┐
-  scheduler ────┼────────>│ kube-    │──────> etcd
-                │         │ apiserver│
-  controllers ──┤         └──────────┘
-                │
-  kubectl ──────┘
+```mermaid
+graph LR
+    kubelet --> API[kube-apiserver]
+    kube-proxy --> API
+    scheduler --> API
+    controllers --> API
+    kubectl --> API
+    API --> etcd
 ```
 
 **Key communication patterns:**

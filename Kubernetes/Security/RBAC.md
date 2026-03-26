@@ -11,23 +11,16 @@ topic: Security
 
 **Role-Based Access Control** (RBAC) is the standard authorization mechanism in Kubernetes. It lets you define **who** (subject) can do **what** (verbs) on **which resources** (API objects). RBAC is enabled by default on all modern Kubernetes clusters and is controlled through four API objects that work together.
 
-```
-  Subject              Binding              Role
-  (who)                (glue)               (permissions)
-
-  +--------+       +-------------+       +----------+
-  | User   |       |             |       |          |
-  | Group  |<------| RoleBinding |------>|  Role    |
-  | SA     |       |             |       |          |
-  +--------+       +-------------+       +----------+
-                       (namespaced)         (namespaced)
-
-  +--------+       +--------------------+   +-------------+
-  | User   |       |                    |   |             |
-  | Group  |<------| ClusterRoleBinding |-->| ClusterRole |
-  | SA     |       |                    |   |             |
-  +--------+       +--------------------+   +-------------+
-                       (cluster-wide)         (cluster-wide)
+```mermaid
+graph LR
+    subgraph Namespaced
+        S1["Subject\n(User / Group / SA)"] --- RB["RoleBinding"]
+        RB --- R["Role"]
+    end
+    subgraph Cluster-wide
+        S2["Subject\n(User / Group / SA)"] --- CRB["ClusterRoleBinding"]
+        CRB --- CR["ClusterRole"]
+    end
 ```
 
 ## RBAC API Objects
@@ -240,20 +233,11 @@ Kubernetes ships with several default ClusterRoles. The four most important ones
 | **edit** | Namespace-scoped (via RoleBinding) | Read/write most resources in a namespace. Cannot view or modify Roles or RoleBindings. |
 | **view** | Namespace-scoped (via RoleBinding) | Read-only access to most resources. Cannot view Secrets (to prevent credential exposure) or Roles/RoleBindings. |
 
-```
-  cluster-admin
-       |
-       | (superset of)
-       v
-     admin    ── can manage Roles/RoleBindings
-       |
-       | (superset of)
-       v
-     edit     ── can read/write workloads, configmaps, secrets
-       |
-       | (superset of)
-       v
-     view     ── read-only (no Secrets)
+```mermaid
+graph TD
+    CA["cluster-admin"] -->|superset of| A["admin\ncan manage Roles/RoleBindings"]
+    A -->|superset of| E["edit\ncan read/write workloads, configmaps, secrets"]
+    E -->|superset of| V["view\nread-only (no Secrets)"]
 ```
 
 Other notable default ClusterRoles:

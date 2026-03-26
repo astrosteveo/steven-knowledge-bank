@@ -14,23 +14,12 @@ Kubernetes separates **storage provisioning** from **storage consumption** using
 - **PersistentVolume (PV)** -- a piece of storage in the cluster, provisioned by an administrator or dynamically by a [[Storage Classes|StorageClass]]. It is a cluster-level resource (no namespace).
 - **PersistentVolumeClaim (PVC)** -- a request for storage made by a developer. It lives in a namespace and binds to a matching PV.
 
-```
-Administrator / StorageClass              Developer
-         │                                     │
-         ▼                                     ▼
-   ┌───────────┐    binding           ┌──────────────┐
-   │     PV    │◄────────────────────►│     PVC      │
-   │  10Gi RWO │   (auto-matched     │  request 5Gi │
-   │  gp3-csi  │    by size, access   │  RWO         │
-   └───────────┘    mode, class)      └──────┬───────┘
-                                             │
-                                             ▼
-                                     ┌──────────────┐
-                                     │     Pod      │
-                                     │  volumes:    │
-                                     │  - pvc:      │
-                                     │    claimName │
-                                     └──────────────┘
+```mermaid
+graph TD
+    Admin["Administrator / StorageClass"] --> PV["PV\n10Gi RWO\ngp3-csi"]
+    Dev["Developer"] --> PVC["PVC\nrequest 5Gi\nRWO"]
+    PV <-- "binding\n(auto-matched by\nsize, access mode, class)" --> PVC
+    PVC --> Pod["Pod\nvolumes:\n- pvc: claimName"]
 ```
 
 The separation means developers never need to know the details of the underlying storage -- they just ask for "10Gi of ReadWriteOnce storage" and Kubernetes handles the rest.
@@ -156,26 +145,19 @@ The reclaim policy determines what happens to the PV (and its underlying storage
 
 ## PV Lifecycle
 
-```
-                    PVC created
-                    and matches
-  ┌───────────┐    ──────────►    ┌────────┐
-  │ Available  │                  │  Bound  │
-  └───────────┘                   └───┬────┘
-       ▲                              │
-       │ admin reclaims               │ PVC deleted
-       │ and cleans up                ▼
-       │                        ┌───────────┐
-       └──────────────────────  │ Released   │
-                                └─────┬─────┘
-                                      │
-                              (reclaim policy)
-                                      │
-                    ┌─────────────────┼──────────────────┐
-                    ▼                 ▼                   ▼
-              Retain (manual)   Delete (auto)    Recycle (deprecated)
-              data preserved    PV + storage     rm -rf, PV re-available
-                                destroyed
+```mermaid
+stateDiagram-v2
+    Available --> Bound : PVC created and matches
+    Bound --> Released : PVC deleted
+    Released --> Available : Admin reclaims and cleans up
+
+    state Released {
+        direction LR
+        [*] --> ReclaimPolicy
+        ReclaimPolicy --> Retain : manual – data preserved
+        ReclaimPolicy --> Delete : auto – PV + storage destroyed
+        ReclaimPolicy --> Recycle : deprecated – rm -rf, PV re-available
+    }
 ```
 
 - **Available** -- the PV exists and is not yet claimed.

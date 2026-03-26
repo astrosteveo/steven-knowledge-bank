@@ -228,15 +228,12 @@ graph LR
 
 A proxy container that simplifies access to external services on behalf of the main container.
 
-```
-┌──────────────────────────────────┐
-│ Pod                              │
-│  ┌─────────┐   ┌─────────────┐  │
-│  │  App    │──►│ Ambassador  │──► Database cluster
-│  │localhost │   │ (proxy)     │  │  (routes to correct shard)
-│  │ :5432   │   │ :5432       │  │
-│  └─────────┘   └─────────────┘  │
-└──────────────────────────────────┘
+```mermaid
+graph LR
+    subgraph Pod
+        A["App\nlocalhost:5432"] -->|localhost| P["Ambassador\n(proxy)\n:5432"]
+    end
+    P --> D["Database cluster\n(routes to correct shard)"]
 ```
 
 **Examples:** database proxies (PgBouncer, Cloud SQL Auth Proxy), service mesh proxies.
@@ -245,15 +242,12 @@ A proxy container that simplifies access to external services on behalf of the m
 
 A container that transforms the output of the main container into a standardized format.
 
-```
-┌──────────────────────────────────┐
-│ Pod                              │
-│  ┌─────────┐   ┌─────────────┐  │
-│  │  App    │──►│  Adapter    │──► Prometheus
-│  │ (custom │   │ (transforms │  │  (/metrics)
-│  │  logs)  │   │  to metrics)│  │
-│  └─────────┘   └─────────────┘  │
-└──────────────────────────────────┘
+```mermaid
+graph LR
+    subgraph Pod
+        A["App\n(custom logs)"] --> Ad["Adapter\n(transforms to metrics)"]
+    end
+    Ad --> P["Prometheus\n(/metrics)"]
 ```
 
 **Examples:** Prometheus exporters, log format converters.
