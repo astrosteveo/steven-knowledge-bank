@@ -13,15 +13,25 @@ Ansible is an **agentless** automation tool. Unlike Chef or Puppet, you don't in
 
 ## Key Mental Model
 
-```
-Control Node                          Managed Nodes
-(your machine)                        (servers you manage)
+```mermaid
+graph LR
+    subgraph CN["Control Node (your machine)"]
+        cfg[ansible.cfg]
+        inv[inventory]
+        pb[playbook.yml]
+        roles[roles/]
+        coll[collections/]
+    end
 
-  ansible.cfg
-  inventory         ──── SSH ────►    web1.example.com
-  playbook.yml       (no agent)       web2.example.com
-  roles/                              db1.example.com
-  collections/
+    subgraph MN["Managed Nodes (servers you manage)"]
+        web1[web1.example.com]
+        web2[web2.example.com]
+        db1[db1.example.com]
+    end
+
+    CN -- "SSH (no agent)" --> web1
+    CN -- "SSH (no agent)" --> web2
+    CN -- "SSH (no agent)" --> db1
 ```
 
 ## Terminology

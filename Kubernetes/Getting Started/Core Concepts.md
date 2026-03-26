@@ -15,29 +15,43 @@ Without an orchestrator, you'd have to manually decide which server runs which c
 
 ## Key Mental Model
 
-```
-                        Control Plane
-                    ┌──────────────────────────────────────┐
-                    │  API Server (kube-apiserver)          │
-                    │  Scheduler (kube-scheduler)           │
-                    │  Controller Manager (kube-controller) │
-                    │  etcd (cluster state store)           │
-                    └──────────────┬───────────────────────┘
-                                   │
-                    ┌──────────────┴───────────────────────┐
-                    │           Kubernetes API              │
-                    └──┬──────────────┬──────────────┬─────┘
-                       │              │              │
-               ┌───────▼──┐   ┌──────▼───┐   ┌─────▼────┐
-               │ Worker 1  │   │ Worker 2  │   │ Worker 3  │
-               │           │   │           │   │           │
-               │ kubelet   │   │ kubelet   │   │ kubelet   │
-               │ kube-proxy│   │ kube-proxy│   │ kube-proxy│
-               │ container │   │ container │   │ container │
-               │ runtime   │   │ runtime   │   │ runtime   │
-               │           │   │           │   │           │
-               │ [Pod][Pod]│   │ [Pod]     │   │ [Pod][Pod]│
-               └───────────┘   └───────────┘   └──────────┘
+```mermaid
+flowchart TD
+    subgraph CP["Control Plane"]
+        api[API Server\nkube-apiserver]
+        sched[Scheduler\nkube-scheduler]
+        cm[Controller Manager\nkube-controller]
+        etcd[etcd\ncluster state store]
+    end
+
+    api --- K8sAPI[Kubernetes API]
+
+    K8sAPI --> W1
+    K8sAPI --> W2
+    K8sAPI --> W3
+
+    subgraph W1["Worker 1"]
+        kubelet1[kubelet]
+        proxy1[kube-proxy]
+        runtime1[container runtime]
+        pod1a([Pod])
+        pod1b([Pod])
+    end
+
+    subgraph W2["Worker 2"]
+        kubelet2[kubelet]
+        proxy2[kube-proxy]
+        runtime2[container runtime]
+        pod2a([Pod])
+    end
+
+    subgraph W3["Worker 3"]
+        kubelet3[kubelet]
+        proxy3[kube-proxy]
+        runtime3[container runtime]
+        pod3a([Pod])
+        pod3b([Pod])
+    end
 ```
 
 The **control plane** makes decisions about the cluster (scheduling, detecting failures, responding to events). **Worker nodes** run your actual application containers inside Pods. All communication goes through the **API Server** — it's the single source of truth.
@@ -113,22 +127,16 @@ The declarative approach is preferred because manifests can be version-controlle
 
 Every controller in Kubernetes runs a continuous **reconciliation loop** — also called a control loop. This is the mechanism behind Kubernetes' self-healing behavior:
 
-```
-         ┌─────────────────┐
-         │   Observe        │  Read current state from the API server
-         └────────┬─────────┘
-                  │
-                  ▼
-         ┌─────────────────┐
-         │   Diff           │  Compare current state to desired state
-         └────────┬─────────┘
-                  │
-                  ▼
-         ┌─────────────────┐
-         │   Act            │  Take action to close the gap (or do nothing)
-         └────────┬─────────┘
-                  │
-                  └──────────► (repeat forever)
+```mermaid
+stateDiagram-v2
+    Observe: Observe\nRead current state from the API server
+    Diff: Diff\nCompare current state to desired state
+    Act: Act\nTake action to close the gap (or do nothing)
+
+    [*] --> Observe
+    Observe --> Diff
+    Diff --> Act
+    Act --> Observe: repeat forever
 ```
 
 For example, the Deployment controller watches for Deployment objects. If you declare `replicas: 3` and only 2 Pods exist, it creates one more. If a node dies and a Pod is lost, the controller notices the drift and creates a replacement. You never tell Kubernetes "create a Pod" — you tell it "I want 3 Pods" and it continuously ensures that's true.

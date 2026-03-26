@@ -15,18 +15,20 @@ Kubernetes imposes a few fundamental rules on the cluster network:
 2. **Pods can communicate with all other Pods without NAT** — regardless of which node they land on.
 3. **Agents on a node can communicate with all Pods on that node.**
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                     Cluster Network                      │
-│                                                         │
-│  Node A                         Node B                  │
-│  ┌───────────────────┐          ┌───────────────────┐   │
-│  │ Pod 10.244.1.2    │◄────────►│ Pod 10.244.2.5    │   │
-│  │ Pod 10.244.1.3    │  No NAT  │ Pod 10.244.2.6    │   │
-│  └───────────────────┘          └───────────────────┘   │
-│                                                         │
-│  Every Pod has a real, routable IP address.              │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+graph LR
+    subgraph Cluster Network
+        subgraph Node A
+            PA1["Pod 10.244.1.2"]
+            PA2["Pod 10.244.1.3"]
+        end
+        subgraph Node B
+            PB1["Pod 10.244.2.5"]
+            PB2["Pod 10.244.2.6"]
+        end
+        PA1 <-->|No NAT| PB1
+        PA2 <-->|No NAT| PB2
+    end
 ```
 
 This flat network is implemented by a **CNI plugin** (Calico, Cilium, Flannel, etc.). The plugin assigns IPs from a Pod CIDR range and sets up routes so traffic flows between nodes.
@@ -37,18 +39,12 @@ Pods are **ephemeral**. A Deployment may scale up, scale down, or replace Pods a
 
 A **Service** provides a stable virtual IP (the *ClusterIP*) and DNS name that routes traffic to a set of backing Pods. It acts as an internal load balancer that tracks which Pods are healthy and ready to serve.
 
-```
-                  ┌─────────────────┐
-                  │   Service VIP   │
-                  │  10.96.0.50:80  │
-                  │  my-svc.ns.svc  │
-                  └───────┬─────────┘
-            ┌─────────────┼─────────────┐
-            ▼             ▼             ▼
-     ┌────────────┐ ┌────────────┐ ┌────────────┐
-     │  Pod A     │ │  Pod B     │ │  Pod C     │
-     │ 10.244.1.2 │ │ 10.244.2.5 │ │ 10.244.1.7 │
-     └────────────┘ └────────────┘ └────────────┘
+```mermaid
+graph TD
+    SVC["Service VIP\n10.96.0.50:80\nmy-svc.ns.svc"]
+    SVC --> PA["Pod A\n10.244.1.2"]
+    SVC --> PB["Pod B\n10.244.2.5"]
+    SVC --> PC["Pod C\n10.244.1.7"]
 ```
 
 ## Service Types

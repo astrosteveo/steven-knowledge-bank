@@ -17,22 +17,16 @@ A Pod is the **smallest deployable unit** in Kubernetes. It represents a single 
 
 Think of a Pod as a logical host for tightly coupled containers that need to work together.
 
-```
-Pod (10.244.1.5)
-┌──────────────────────────────────────────────┐
-│                                              │
-│  ┌──────────────┐    ┌──────────────┐        │
-│  │ Container A  │    │ Container B  │        │
-│  │ (app)        │    │ (sidecar)    │        │
-│  │ port 8080    │    │ port 9090    │        │
-│  └──────┬───────┘    └──────┬───────┘        │
-│         │                   │                │
-│         └───── localhost ───┘                │
-│                                              │
-│  ┌──────────────────────────────────┐        │
-│  │  Shared Volume: /var/log/app     │        │
-│  └──────────────────────────────────┘        │
-└──────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph Pod["Pod (10.244.1.5)"]
+        A["Container A\n(app)\nport 8080"]
+        B["Container B\n(sidecar)\nport 9090"]
+        V["Shared Volume: /var/log/app"]
+        A -- localhost --- B
+        A --- V
+        B --- V
+    end
 ```
 
 ## Pod YAML Manifest
@@ -132,18 +126,11 @@ A Pod's `status.phase` field tells you where it is in its lifecycle:
 | **Failed** | All containers terminated and at least one exited with a non-zero exit code. |
 | **Unknown** | Pod state cannot be determined, usually due to a communication error with the node. |
 
-```
-                ┌──────────┐
-                │ Pending  │
-                └────┬─────┘
-                     │
-              ┌──────▼──────┐
-              │   Running   │
-              └──┬───────┬──┘
-                 │       │
-         ┌───────▼──┐ ┌──▼───────┐
-         │Succeeded │ │  Failed  │
-         └──────────┘ └──────────┘
+```mermaid
+stateDiagram-v2
+    Pending --> Running
+    Running --> Succeeded
+    Running --> Failed
 ```
 
 ## Container States
@@ -227,15 +214,12 @@ When a Pod runs multiple containers, they typically follow one of three patterns
 
 An auxiliary container that extends or enhances the main container without the main container knowing about it.
 
-```
-┌─────────────────────────────────┐
-│ Pod                             │
-│  ┌─────────┐   ┌────────────┐  │
-│  │  App    │──►│ Log Shipper│──► External logging
-│  │         │   │ (sidecar)  │  │
-│  └─────────┘   └────────────┘  │
-│       shared volume: /logs      │
-└─────────────────────────────────┘
+```mermaid
+graph LR
+    subgraph Pod
+        A[App] -->|shared volume: /logs| S[Log Shipper\nsidecar]
+    end
+    S --> E[External logging]
 ```
 
 **Examples:** log collectors, file synchronizers, configuration watchers.
