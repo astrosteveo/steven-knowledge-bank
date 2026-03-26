@@ -61,65 +61,18 @@ Some resources have subresources accessible at nested paths:
 
 Every request to the apiserver passes through a strict pipeline. Understanding this pipeline is essential for debugging admission failures, RBAC issues, and webhook behavior.
 
-```
-  Client (kubectl, controller, kubelet)
-       |
-       | HTTPS request
-       v
-  +-----------+
-  | TLS       |  Terminate TLS, verify client certificate
-  | Handshake |
-  +-----------+
-       |
-       v
-  +------------------+
-  | Authentication   |  Identify the user.
-  | (AuthN)          |  Returns: user, groups, extra fields
-  |                  |  Plugins tried in order until one succeeds.
-  +------------------+
-       |
-       v
-  +------------------+
-  | Authorization    |  Check if the user can perform this action.
-  | (AuthZ)          |  Input: user, verb, resource, namespace
-  |                  |  RBAC evaluates Roles/ClusterRoles.
-  +------------------+
-       |
-       v
-  +------------------+
-  | Mutating         |  Modify the request object.
-  | Admission        |  Built-in mutating controllers run first,
-  |                  |  then MutatingAdmissionWebhooks.
-  +------------------+
-       |
-       v
-  +------------------+
-  | Object Schema    |  Validate the object against its schema.
-  | Validation       |  Check required fields, field types, etc.
-  +------------------+
-       |
-       v
-  +------------------+
-  | Validating       |  Final validation. Can reject but not modify.
-  | Admission        |  Built-in validating controllers,
-  |                  |  then ValidatingAdmissionWebhooks.
-  +------------------+
-       |
-       v
-  +------------------+
-  | Persist to etcd  |  Write the object (serialized as protobuf).
-  +------------------+
-       |
-       v
-  +------------------+
-  | Response         |  Return the created/updated object to the client.
-  +------------------+
-       |
-       v
-  +------------------+
-  | Notify Watchers  |  Send watch events to any watchers of this
-  |                  |  resource type (controllers, kubelet, etc.)
-  +------------------+
+```mermaid
+flowchart TD
+    A["Client (kubectl, controller, kubelet)"]
+    A -->|"HTTPS request"| B["TLS Handshake<br><i>Terminate TLS, verify client certificate</i>"]
+    B --> C["Authentication (AuthN)<br><i>Identify the user.<br>Returns: user, groups, extra fields.<br>Plugins tried in order until one succeeds.</i>"]
+    C --> D["Authorization (AuthZ)<br><i>Check if the user can perform this action.<br>Input: user, verb, resource, namespace.<br>RBAC evaluates Roles/ClusterRoles.</i>"]
+    D --> E["Mutating Admission<br><i>Modify the request object.<br>Built-in mutating controllers run first,<br>then MutatingAdmissionWebhooks.</i>"]
+    E --> F["Object Schema Validation<br><i>Validate the object against its schema.<br>Check required fields, field types, etc.</i>"]
+    F --> G["Validating Admission<br><i>Final validation. Can reject but not modify.<br>Built-in validating controllers,<br>then ValidatingAdmissionWebhooks.</i>"]
+    G --> H["Persist to etcd<br><i>Write the object (serialized as protobuf).</i>"]
+    H --> I["Response<br><i>Return the created/updated object to the client.</i>"]
+    I --> J["Notify Watchers<br><i>Send watch events to watchers of this<br>resource type (controllers, kubelet, etc.)</i>"]
 ```
 
 ### Key Details
@@ -132,14 +85,11 @@ Every request to the apiserver passes through a strict pipeline. Understanding t
 
 ### Webhook Ordering
 
-```
-  Mutating Webhooks (ordered by name, can run multiple times if reinvocationPolicy=IfNeeded)
-       |
-       v
-  Schema Validation
-       |
-       v
-  Validating Webhooks (ordered by name, all must pass)
+```mermaid
+flowchart TD
+    A["Mutating Webhooks<br>(ordered by name, can run multiple times<br>if reinvocationPolicy=IfNeeded)"]
+    A --> B[Schema Validation]
+    B --> C["Validating Webhooks<br>(ordered by name, all must pass)"]
 ```
 
 Webhooks have a `failurePolicy` setting:
@@ -172,17 +122,12 @@ Kubernetes follows strict rules:
 
 The apiserver can serve the same resource at multiple versions simultaneously. Internally, it stores objects in a single **storage version** and converts on the fly.
 
-```
-  Client requests apps/v1 Deployment
-       |
-       v
-  apiserver reads from etcd (stored in internal representation)
-       |
-       v
-  Converts to apps/v1 format
-       |
-       v
-  Returns to client
+```mermaid
+flowchart TD
+    A["Client requests apps/v1 Deployment"]
+    A --> B["apiserver reads from etcd<br>(stored in internal representation)"]
+    B --> C["Converts to apps/v1 format"]
+    C --> D["Returns to client"]
 ```
 
 ```bash
@@ -201,16 +146,12 @@ kubectl api-resources -o wide
 
 etcd is a distributed key-value store using the **Raft consensus algorithm** to ensure all nodes agree on the same data.
 
-```
-  +--------+    +--------+    +--------+
-  | etcd 1 |<-->| etcd 2 |<-->| etcd 3 |
-  | (Leader)|    |(Follower)   |(Follower)
-  +--------+    +--------+    +--------+
-       |
-       | all writes go through
-       | the leader
-       v
-  Write committed after majority (2/3) acknowledge
+```mermaid
+graph TD
+    E1["etcd 1 (Leader)"] <-->|Raft| E2["etcd 2 (Follower)"]
+    E1 <-->|Raft| E3["etcd 3 (Follower)"]
+    E2 <-->|Raft| E3
+    E1 -->|"all writes go through the leader"| COMMIT["Write committed after majority (2/3) acknowledge"]
 ```
 
 ### Raft Consensus
@@ -223,26 +164,15 @@ Raft ensures consistency through three mechanisms:
 
 3. **Safety** -- Once committed, a log entry is permanent. No conflicting entries can be committed at the same index.
 
-```
-  Client write request
-       |
-       v
-  Leader appends to WAL (Write-Ahead Log)
-       |
-       v
-  Leader sends AppendEntries RPC to followers
-       |
-       v
-  Followers write to their WAL and acknowledge
-       |
-       v
-  Leader receives majority acknowledgment
-       |
-       v
-  Leader commits the entry (applies to state machine)
-       |
-       v
-  Leader responds to client
+```mermaid
+flowchart TD
+    A[Client write request]
+    A --> B["Leader appends to WAL (Write-Ahead Log)"]
+    B --> C[Leader sends AppendEntries RPC to followers]
+    C --> D[Followers write to their WAL and acknowledge]
+    D --> E[Leader receives majority acknowledgment]
+    E --> F["Leader commits the entry (applies to state machine)"]
+    F --> G[Leader responds to client]
 ```
 
 ### Data Model
@@ -360,24 +290,23 @@ The watch mechanism is the foundation of Kubernetes' event-driven architecture. 
 
 ### How Watch Works
 
-```
-  Controller                              apiserver                    etcd
-     |                                        |                         |
-     |--- GET /api/v1/pods?watch=true ------->|                         |
-     |    (with resourceVersion=1234)         |                         |
-     |                                        |                         |
-     |    <--- HTTP chunked response ---------|                         |
-     |         (long-lived connection)        |                         |
-     |                                        |                         |
-     |                                        |<--- write event -------|
-     |    <--- ADDED {pod object} ------------|                         |
-     |                                        |                         |
-     |                                        |<--- write event -------|
-     |    <--- MODIFIED {pod object} ---------|                         |
-     |                                        |                         |
-     |                                        |<--- delete event ------|
-     |    <--- DELETED {pod object} ----------|                         |
-     |                                        |                         |
+```mermaid
+sequenceDiagram
+    participant Controller
+    participant apiserver
+    participant etcd
+
+    Controller->>apiserver: GET /api/v1/pods?watch=true (resourceVersion=1234)
+    apiserver-->>Controller: HTTP chunked response (long-lived connection)
+
+    etcd->>apiserver: write event
+    apiserver-->>Controller: ADDED {pod object}
+
+    etcd->>apiserver: write event
+    apiserver-->>Controller: MODIFIED {pod object}
+
+    etcd->>apiserver: delete event
+    apiserver-->>Controller: DELETED {pod object}
 ```
 
 ### Watch Event Types
@@ -400,22 +329,13 @@ Every Kubernetes object and list has a `resourceVersion` field (mapped to an etc
 
 Controllers follow the **Informer pattern** (from `client-go`):
 
-```
-  +----------------------------------------------------------+
-  |  Controller (e.g., Deployment Controller)                 |
-  |                                                           |
-  |  +-----------+    +---------+    +------------------+     |
-  |  | Reflector |    | Store / |    | Work Queue       |     |
-  |  |           |--->| Indexer |--->| (rate-limited)   |     |
-  |  | (watch +  |    | (cache) |    |                  |     |
-  |  |  list)    |    |         |    +--------+---------+     |
-  |  +-----------+    +---------+             |               |
-  |                                           v               |
-  |                                    +------+------+        |
-  |                                    | Reconcile() |        |
-  |                                    | function    |        |
-  |                                    +-------------+        |
-  +----------------------------------------------------------+
+```mermaid
+flowchart LR
+    subgraph CTRL["Controller (e.g., Deployment Controller)"]
+        R["Reflector<br>(watch + list)"] --> S["Store / Indexer<br>(cache)"]
+        S --> WQ["Work Queue<br>(rate-limited)"]
+        WQ --> REC["Reconcile() function"]
+    end
 ```
 
 1. **Reflector** -- Lists all objects on startup, then watches for changes. Puts events into the store.

@@ -192,17 +192,11 @@ All modern runtimes follow OCI (Open Container Initiative) standards:
 - **OCI Image Spec** -- How container images are formatted.
 - **OCI Runtime Spec** -- How containers are created and run (implemented by low-level runtimes like `runc`).
 
-```
-  kubelet
-    |
-    v (CRI)
-  containerd / CRI-O       <-- high-level runtime
-    |
-    v (OCI Runtime Spec)
-  runc / crun / kata        <-- low-level runtime
-    |
-    v
-  Linux namespaces, cgroups, seccomp, etc.
+```mermaid
+graph TD
+    A[kubelet] -->|CRI| B["containerd / CRI-O<br>(high-level runtime)"]
+    B -->|OCI Runtime Spec| C["runc / crun / kata<br>(low-level runtime)"]
+    C --> D["Linux namespaces, cgroups, seccomp, etc."]
 ```
 
 ---
@@ -322,23 +316,12 @@ Before Leases, every heartbeat was a full NodeStatus update to etcd. For large c
 
 ### Failure Detection Timeline
 
-```
-  kubelet sends heartbeat
-       |
-       | (10s default interval)
-       v
-  Lease renewal
-       |
-  ...  | (node goes down)
-       |
-  Lease expires (40s default: node-monitor-grace-period)
-       |
-       v
-  Node condition set to "Unknown"
-       |
-       | (5m default: pod-eviction-timeout)
-       v
-  Pod eviction begins -- Pods rescheduled to healthy nodes
+```mermaid
+flowchart TD
+    A[kubelet sends heartbeat] -->|"10s default interval"| B[Lease renewal]
+    B -->|"node goes down"| C["Lease expires<br>(40s default: node-monitor-grace-period)"]
+    C --> D["Node condition set to Unknown"]
+    D -->|"5m default: pod-eviction-timeout"| E["Pod eviction begins<br>Pods rescheduled to healthy nodes"]
 ```
 
 | Parameter | Default | Description |

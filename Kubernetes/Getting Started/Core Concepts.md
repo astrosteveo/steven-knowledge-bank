@@ -58,32 +58,32 @@ The **control plane** makes decisions about the cluster (scheduling, detecting f
 
 ## Terminology
 
-| Term | What it means |
-|---|---|
-| **Cluster** | A set of machines (nodes) running Kubernetes — includes the control plane and worker nodes |
-| **Node** | A single machine (physical or virtual) in the cluster that runs workloads |
-| **Pod** | The smallest deployable unit — one or more containers that share networking and storage, always co-located |
-| **Service** | A stable network endpoint that load-balances traffic to a set of Pods (Pods are ephemeral, Services are not) |
-| **Deployment** | Declares the desired state for a set of Pods — handles rolling updates, rollbacks, and scaling |
-| **ReplicaSet** | Ensures a specified number of identical Pods are running at any time (usually managed by a Deployment) |
-| **Namespace** | A virtual cluster within a cluster — used to isolate resources between teams or environments |
-| **ConfigMap** | Stores non-sensitive configuration data as key-value pairs, injected into Pods as environment variables or files |
-| **Secret** | Like a ConfigMap but for sensitive data (passwords, tokens, keys) — base64-encoded, not encrypted by default |
-| **Volume** | A directory accessible to containers in a Pod — decouples storage from the container lifecycle |
-| **Ingress** | Manages external HTTP/HTTPS access to Services, typically providing routing rules, TLS termination, and virtual hosting |
-| **Label** | A key-value pair attached to any object — used for identification and grouping (e.g., `app: nginx`, `env: prod`) |
-| **Selector** | A query that matches objects by their labels (e.g., "give me all Pods where `app=nginx`") |
-| **Controller** | A control loop that watches the cluster state and makes changes to move current state toward desired state |
-| **Operator** | A controller that encodes domain-specific operational knowledge for managing a complex application (e.g., a database) |
-| **Manifest** | A YAML or JSON file describing a Kubernetes resource — what you `kubectl apply` |
-| **kubectl** | The CLI tool for interacting with the Kubernetes API server |
-| **kubelet** | An agent on each worker node that ensures containers described in PodSpecs are running and healthy |
-| **kube-proxy** | A network proxy on each node that maintains network rules so Pods can communicate inside and outside the cluster |
-| **etcd** | A distributed key-value store that holds all cluster state and configuration — the control plane's database |
-| **API Server** | The front door to the control plane — all kubectl commands, internal components, and external integrations talk to it |
-| **Scheduler** | Decides which node a newly created Pod should run on, based on resource requirements, constraints, and affinity rules |
-| **Controller Manager** | Runs the built-in controllers (Deployment, ReplicaSet, Node, Job, etc.) as a single process |
-| **Container Runtime** | The software that actually runs containers on a node (containerd, CRI-O) — Kubernetes talks to it via the CRI |
+| Term                   | What it means                                                                                                           |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Cluster**            | A set of machines (nodes) running Kubernetes — includes the control plane and worker nodes                              |
+| **Node**               | A single machine (physical or virtual) in the cluster that runs workloads                                               |
+| **Pod**                | The smallest deployable unit — one or more containers that share networking and storage, always co-located              |
+| **Service**            | A stable network endpoint that load-balances traffic to a set of Pods (Pods are ephemeral, Services are not)            |
+| **Deployment**         | Declares the desired state for a set of Pods — handles rolling updates, rollbacks, and scaling                          |
+| **ReplicaSet**         | Ensures a specified number of identical Pods are running at any time (usually managed by a Deployment)                  |
+| **Namespace**          | A virtual cluster within a cluster — used to isolate resources between teams or environments                            |
+| **ConfigMap**          | Stores non-sensitive configuration data as key-value pairs, injected into Pods as environment variables or files        |
+| **Secret**             | Like a ConfigMap but for sensitive data (passwords, tokens, keys) — base64-encoded, not encrypted by default            |
+| **Volume**             | A directory accessible to containers in a Pod — decouples storage from the container lifecycle                          |
+| **Ingress**            | Manages external HTTP/HTTPS access to Services, typically providing routing rules, TLS termination, and virtual hosting |
+| **Label**              | A key-value pair attached to any object — used for identification and grouping (e.g., `app: nginx`, `env: prod`)        |
+| **Selector**           | A query that matches objects by their labels (e.g., "give me all Pods where `app=nginx`")                               |
+| **Controller**         | A control loop that watches the cluster state and makes changes to move current state toward desired state              |
+| **Operator**           | A controller that encodes domain-specific operational knowledge for managing a complex application (e.g., a database)   |
+| **Manifest**           | A YAML or JSON file describing a Kubernetes resource — what you `kubectl apply`                                         |
+| **kubectl**            | The CLI tool for interacting with the Kubernetes API server                                                             |
+| **kubelet**            | An agent on each worker node that ensures containers described in PodSpecs are running and healthy                      |
+| **kube-proxy**         | A network proxy on each node that maintains network rules so Pods can communicate inside and outside the cluster        |
+| **etcd**               | A distributed key-value store that holds all cluster state and configuration — the control plane's database             |
+| **API Server**         | The front door to the control plane — all kubectl commands, internal components, and external integrations talk to it   |
+| **Scheduler**          | Decides which node a newly created Pod should run on, based on resource requirements, constraints, and affinity rules   |
+| **Controller Manager** | Runs the built-in controllers (Deployment, ReplicaSet, Node, Job, etc.) as a single process                             |
+| **Container Runtime**  | The software that actually runs containers on a node (containerd, CRI-O) — Kubernetes talks to it via the CRI           |
 
 ## Declarative vs Imperative
 
