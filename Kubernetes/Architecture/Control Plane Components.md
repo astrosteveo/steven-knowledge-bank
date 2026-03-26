@@ -240,17 +240,11 @@ The controller manager is a single binary that bundles dozens of **controllers**
 
 ### Core Reconciliation Pattern
 
-```
-  Desired State          Actual State
-  (stored in etcd)       (observed in cluster)
-       |                       |
-       +----------+------------+
-                  |
-                  v
-            +-----------+
-            | Controller|
-            | Loop      |-------> Take action to reconcile
-            +-----------+         (create/update/delete resources)
+```mermaid
+flowchart TD
+    DS["Desired State<br>(stored in etcd)"] --> CL["Controller Loop"]
+    AS["Actual State<br>(observed in cluster)"] --> CL
+    CL -->|"Take action to reconcile"| R["Create / Update / Delete resources"]
 ```
 
 ### Key Controllers

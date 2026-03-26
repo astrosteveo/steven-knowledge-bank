@@ -17,30 +17,15 @@ Real-world Kubernetes patterns with brief explanations and minimal YAML examples
 
 A typical three-tier setup: a stateless web Deployment fronted by a Service, backed by a database running as a StatefulSet with persistent storage.
 
-```
-                  ┌─────────────┐
-  Internet ──────►│   Ingress   │
-                  └──────┬──────┘
-                         │
-                  ┌──────▼──────┐
-                  │  web Service│
-                  └──────┬──────┘
-                         │
-              ┌──────────┼──────────┐
-              │          │          │
-         ┌────▼───┐ ┌───▼────┐ ┌──▼─────┐
-         │ web-0  │ │ web-1  │ │ web-2  │  Deployment
-         └────┬───┘ └───┬────┘ └──┬─────┘
-              └──────────┼────────┘
-                         │
-                  ┌──────▼──────┐
-                  │  db Service │  (headless)
-                  └──────┬──────┘
-                         │
-                    ┌────▼────┐
-                    │  db-0   │  StatefulSet
-                    │  (PVC)  │
-                    └─────────┘
+```mermaid
+flowchart TD
+    Internet["Internet"] --> Ingress["Ingress"]
+    Ingress --> WebSvc["web Service"]
+    WebSvc --> Web0["web-0"]
+    WebSvc --> Web1["web-1"]
+    WebSvc --> Web2["web-2"]
+    Web0 & Web1 & Web2 --> DbSvc["db Service\n(headless)"]
+    DbSvc --> Db0["db-0\nStatefulSet\n(PVC)"]
 ```
 
 **Web Deployment and Service:**
@@ -288,14 +273,12 @@ spec:
 
 An ambassador container proxies outbound connections from the application container, handling concerns like TLS termination, connection pooling, or routing to the correct backend.
 
-```
-  ┌──────────────────────────────────┐
-  │            Pod                   │
-  │  ┌────────┐     ┌────────────┐  │
-  │  │  app   │────►│ ambassador │──────► external API
-  │  │        │     │  (envoy)   │  │
-  │  └────────┘     └────────────┘  │
-  └──────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph Pod
+        App["app"] --> Amb["ambassador\n(envoy)"]
+    end
+    Amb --> Ext["external API"]
 ```
 
 ```yaml
