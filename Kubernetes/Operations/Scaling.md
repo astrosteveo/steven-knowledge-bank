@@ -31,25 +31,11 @@ Manual scaling is immediate but requires human intervention. For production work
 
 HPA automatically adjusts the number of Pod replicas based on observed metrics. It runs as a control loop in the `kube-controller-manager`, checking metrics at a configurable interval (default: 15 seconds).
 
-```
-HPA Control Loop
-
-┌──────────────────────────────────────────────────────┐
-│                 HPA Controller                        │
-│                                                       │
-│  1. Query metrics (Metrics API / Custom Metrics API)  │
-│  2. Calculate desired replicas:                       │
-│     desired = ceil(current * (currentValue / target)) │
-│  3. Scale the target resource                         │
-│                                                       │
-└──────────┬─────────────────────┬─────────────────────┘
-           │                     │
-           ▼                     ▼
-   ┌──────────────┐     ┌──────────────────┐
-   │ Metrics API  │     │   Deployment /   │
-   │ (metrics-    │     │   ReplicaSet /   │
-   │  server)     │     │   StatefulSet    │
-   └──────────────┘     └──────────────────┘
+```mermaid
+flowchart TD
+    HPA["HPA Controller\n\n1. Query metrics\n2. Calculate desired replicas:\n desired = ceil(current * currentValue / target)\n3. Scale the target resource"]
+    HPA --> Metrics["Metrics API\n(metrics-server)"]
+    HPA --> Target["Deployment /\nReplicaSet /\nStatefulSet"]
 ```
 
 ### Scaling Formula
@@ -175,18 +161,9 @@ kubectl describe hpa my-app-hpa
 
 VPA automatically adjusts the **CPU and memory requests/limits** on containers. Instead of adding more Pods, it right-sizes existing Pods.
 
-```
-VPA Components
-
-┌────────────────┐    ┌───────────────┐    ┌────────────────┐
-│   Recommender  │───▶│    Updater    │───▶│   Admission    │
-│                │    │               │    │   Controller   │
-│ Analyzes       │    │ Evicts Pods   │    │ Sets requests  │
-│ historical     │    │ that are      │    │ on newly       │
-│ resource usage │    │ outside the   │    │ created Pods   │
-│ and produces   │    │ recommended   │    │                │
-│ recommendations│    │ range         │    │                │
-└────────────────┘    └───────────────┘    └────────────────┘
+```mermaid
+flowchart LR
+    R["Recommender\n\nAnalyzes historical\nresource usage and\nproduces recommendations"] --> U["Updater\n\nEvicts Pods that\nare outside the\nrecommended range"] --> A["Admission Controller\n\nSets requests on\nnewly created Pods"]
 ```
 
 ### VPA YAML Manifest

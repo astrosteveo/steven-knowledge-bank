@@ -108,26 +108,35 @@ graph TD
 
 ### Multi-Master (HA)
 
-```
-  +------------+    +------------+    +------------+
-  | CP Node 1  |    | CP Node 2  |    | CP Node 3  |
-  | apiserver  |    | apiserver  |    | apiserver  |
-  | etcd       |    | etcd       |    | etcd       |
-  | scheduler* |    | scheduler  |    | scheduler  |
-  | ctrl-mgr*  |    | ctrl-mgr   |    | ctrl-mgr   |
-  +------+-----+    +------+-----+    +------+-----+
-         |                 |                 |
-         +---------+-------+---------+-------+
-                   |                 |
-              +----+----+       +----+----+
-              |   Load  |       |   Load  |
-              | Balancer|       | Balancer|
-              +---------+       +---------+
-                      |
-                 Worker Nodes
+```mermaid
+flowchart TD
+    subgraph CP1["CP Node 1"]
+        API1[apiserver]
+        ETCD1[etcd]
+        SCHED1["scheduler *"]
+        CM1["ctrl-mgr *"]
+    end
 
-  * = active leader (scheduler and controller-manager use leader election)
+    subgraph CP2["CP Node 2"]
+        API2[apiserver]
+        ETCD2[etcd]
+        SCHED2[scheduler]
+        CM2[ctrl-mgr]
+    end
+
+    subgraph CP3["CP Node 3"]
+        API3[apiserver]
+        ETCD3[etcd]
+        SCHED3[scheduler]
+        CM3[ctrl-mgr]
+    end
+
+    CP1 & CP2 & CP3 --> LB1[Load Balancer]
+    CP1 & CP2 & CP3 --> LB2[Load Balancer]
+    LB1 & LB2 --> Workers[Worker Nodes]
 ```
+
+> \* = active leader (scheduler and controller-manager use leader election)
 
 - **apiserver** runs active-active behind a load balancer. All instances serve requests.
 - **scheduler** and **controller-manager** use leader election. Only one is active; others are on standby.
@@ -183,24 +192,18 @@ Spread control plane nodes across **failure domains** (different racks, availabi
 
 ### Managed Kubernetes Architecture (e.g., EKS)
 
-```
-  +----------------------------------+
-  |  Cloud Provider Managed          |
-  |  (hidden from you)               |
-  |                                  |
-  |  apiserver  etcd  scheduler      |
-  |  controller-manager              |
-  +----------------+-----------------+
-                   |
-          Managed API endpoint
-                   |
-    +--------------+--------------+
-    |              |              |
-  +------+    +------+    +------+
-  |Worker|    |Worker|    |Worker|
-  | Node |    | Node |    | Node |   <-- You manage these
-  |(EC2) |    |(EC2) |    |(EC2) |
-  +------+    +------+    +------+
+```mermaid
+flowchart TD
+    subgraph Managed["Cloud Provider Managed (hidden from you)"]
+        API[apiserver]
+        ETCD[etcd]
+        SCHED[scheduler]
+        CM[controller-manager]
+    end
+
+    Managed -->|"Managed API endpoint"| W1["Worker Node (EC2)"]
+    Managed -->|"Managed API endpoint"| W2["Worker Node (EC2)"]
+    Managed -->|"Managed API endpoint"| W3["Worker Node (EC2)"]
 ```
 
 In managed Kubernetes, you never see or SSH into control plane nodes. The provider guarantees HA for the control plane, handles etcd backups, and exposes only the apiserver endpoint.

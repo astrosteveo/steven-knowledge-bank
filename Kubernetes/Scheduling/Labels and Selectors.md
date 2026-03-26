@@ -203,18 +203,13 @@ spec:
       targetPort: 8080
 ```
 
-```
-  +-----------------+
-  |  frontend-svc   |
-  |  (ClusterIP)    |
-  +--------+--------+
-           |  selector: app=web-frontend, tier=frontend
-           |
-    +------+------+------+
-    |      |      |      |
-  +---+  +---+  +---+  +---+
-  |Pod|  |Pod|  |Pod|  |Pod|   <-- all have labels app=web-frontend, tier=frontend
-  +---+  +---+  +---+  +---+
+```mermaid
+graph TD
+    SVC["frontend-svc\n(ClusterIP)"]
+    SVC -->|"selector: app=web-frontend, tier=frontend"| P1["Pod"]
+    SVC --> P2["Pod"]
+    SVC --> P3["Pod"]
+    SVC --> P4["Pod"]
 ```
 
 Services only support `matchLabels`-style selectors (simple equality). They do not support `matchExpressions`.

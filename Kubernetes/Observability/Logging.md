@@ -11,34 +11,25 @@ topic: Observability
 
 Kubernetes itself does not provide a built-in log aggregation solution. Instead, it provides primitives that you build upon. Understanding the architecture helps you choose the right logging strategy.
 
-```
-  ┌──────────────────────────────────────────────────────────┐
-  │                      CLUSTER                             │
-  │                                                          │
-  │  ┌─── Node ──────────────────────────────────────────┐   │
-  │  │                                                    │   │
-  │  │  ┌─── Pod ───────────────────────┐                 │   │
-  │  │  │  Container                    │                 │   │
-  │  │  │    app writes to              │                 │   │
-  │  │  │    stdout / stderr ──────────────► container    │   │
-  │  │  │                               │     log file   │   │
-  │  │  └───────────────────────────────┘   /var/log/     │   │
-  │  │                                      containers/   │   │
-  │  │                                         │          │   │
-  │  │  kubelet handles log rotation           │          │   │
-  │  │                                         │          │   │
-  │  │  ┌─ Logging Agent (DaemonSet) ──┐       │          │   │
-  │  │  │  Reads log files ◄───────────────────┘          │   │
-  │  │  │  Parses, enriches, ships     │                  │   │
-  │  │  └──────────┬───────────────────┘                  │   │
-  │  └─────────────┼──────────────────────────────────────┘   │
-  │                │                                          │
-  │                ▼                                          │
-  │  ┌──────────────────────────────┐                         │
-  │  │  Log Backend                  │                         │
-  │  │  (Elasticsearch, Loki, etc.)  │                         │
-  │  └──────────────────────────────┘                         │
-  └──────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Cluster
+        subgraph Node
+            subgraph Pod
+                Container["Container\napp writes to\nstdout / stderr"]
+            end
+            LogFile["/var/log/containers/\ncontainer log file"]
+            Kubelet["kubelet handles log rotation"]
+            subgraph DaemonSet["Logging Agent DaemonSet"]
+                Agent["Reads log files\nParses, enriches, ships"]
+            end
+            Container --> LogFile
+            LogFile --> Kubelet
+            LogFile --> Agent
+        end
+        Backend["Log Backend\n(Elasticsearch, Loki, etc.)"]
+        Agent --> Backend
+    end
 ```
 
 ### How container logs work
