@@ -13,7 +13,7 @@ The standard workflow for performing maintenance on a node (OS updates, kernel p
 
 ```mermaid
 flowchart LR
-    A["1. Cordon\n\nMark node as\nunschedulable"] --> B["2. Drain\n\nEvict all pods safely\n\nRespects PDBs and\ngraceful termination"] --> C["3. Maintain\n\nPerform OS/HW\nwork"] --> D["4. Uncordon\n\nMark node as\nschedulable\n\nPods can be\nscheduled here again"]
+    A["1. Cordon<br/><br/>Mark node as<br/>unschedulable"] --> B["2. Drain<br/><br/>Evict all pods safely<br/><br/>Respects PDBs and<br/>graceful termination"] --> C["3. Maintain<br/><br/>Perform OS/HW<br/>work"] --> D["4. Uncordon<br/><br/>Mark node as<br/>schedulable<br/><br/>Pods can be<br/>scheduled here again"]
 ```
 
 ## Cordoning and Uncordoning Nodes

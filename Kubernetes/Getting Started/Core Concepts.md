@@ -18,10 +18,10 @@ Without an orchestrator, you'd have to manually decide which server runs which c
 ```mermaid
 flowchart TD
     subgraph CP["Control Plane"]
-        api[API Server\nkube-apiserver]
-        sched[Scheduler\nkube-scheduler]
-        cm[Controller Manager\nkube-controller]
-        etcd[etcd\ncluster state store]
+        api[API Server<br/>kube-apiserver]
+        sched[Scheduler<br/>kube-scheduler]
+        cm[Controller Manager<br/>kube-controller]
+        etcd[etcd<br/>cluster state store]
     end
 
     api --- K8sAPI[Kubernetes API]
@@ -129,9 +129,9 @@ Every controller in Kubernetes runs a continuous **reconciliation loop** — als
 
 ```mermaid
 stateDiagram-v2
-    Observe: Observe\nRead current state from the API server
-    Diff: Diff\nCompare current state to desired state
-    Act: Act\nTake action to close the gap (or do nothing)
+    Observe: Observe<br/>Read current state from the API server
+    Diff: Diff<br/>Compare current state to desired state
+    Act: Act<br/>Take action to close the gap (or do nothing)
 
     [*] --> Observe
     Observe --> Diff

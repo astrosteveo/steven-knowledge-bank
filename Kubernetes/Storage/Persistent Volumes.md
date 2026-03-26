@@ -16,10 +16,10 @@ Kubernetes separates **storage provisioning** from **storage consumption** using
 
 ```mermaid
 graph TD
-    Admin["Administrator / StorageClass"] --> PV["PV\n10Gi RWO\ngp3-csi"]
-    Dev["Developer"] --> PVC["PVC\nrequest 5Gi\nRWO"]
-    PV <-- "binding\n(auto-matched by\nsize, access mode, class)" --> PVC
-    PVC --> Pod["Pod\nvolumes:\n- pvc: claimName"]
+    Admin["Administrator / StorageClass"] --> PV["PV<br/>10Gi RWO<br/>gp3-csi"]
+    Dev["Developer"] --> PVC["PVC<br/>request 5Gi<br/>RWO"]
+    PV <-- "binding<br/>(auto-matched by<br/>size, access mode, class)" --> PVC
+    PVC --> Pod["Pod<br/>volumes:<br/>- pvc: claimName"]
 ```
 
 The separation means developers never need to know the details of the underlying storage -- they just ask for "10Gi of ReadWriteOnce storage" and Kubernetes handles the rest.

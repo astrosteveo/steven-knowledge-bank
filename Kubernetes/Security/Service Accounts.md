@@ -15,10 +15,10 @@ A **service account** provides an identity for processes running inside a Pod. W
 graph LR
     subgraph Pod
         App["app container"]
-        Token["projected token\n(mounted vol)"]
+        Token["projected token<br/>(mounted vol)"]
     end
     App -->|authenticated as| SA["system:serviceaccount:dev:my-app"]
-    SA --> RBAC["kube-apiserver checks RBAC:\nCan this SA do X on resource Y?"]
+    SA --> RBAC["kube-apiserver checks RBAC:<br/>Can this SA do X on resource Y?"]
 ```
 
 ## Default Service Account

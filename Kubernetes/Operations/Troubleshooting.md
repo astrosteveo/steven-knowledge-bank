@@ -19,20 +19,20 @@ flowchart TD
     Q --> Cluster
 
     subgraph App["Application"]
-        A1["Pod not running?\nCrashing?\nWrong output?"]
-        A2["kubectl describe\nkubectl logs\nkubectl exec\nkubectl debug"]
+        A1["Pod not running?<br/>Crashing?<br/>Wrong output?"]
+        A2["kubectl describe<br/>kubectl logs<br/>kubectl exec<br/>kubectl debug"]
         A1 --> A2
     end
 
     subgraph Net["Networking"]
-        N1["Service not reachable?\nDNS issues?"]
-        N2["Check endpoints\nCheck DNS\nTest from inside\nthe cluster"]
+        N1["Service not reachable?<br/>DNS issues?"]
+        N2["Check endpoints<br/>Check DNS<br/>Test from inside<br/>the cluster"]
         N1 --> N2
     end
 
     subgraph Cluster["Cluster"]
-        C1["Node not Ready?\nResources exhausted?"]
-        C2["kubectl describe node\nCheck conditions"]
+        C1["Node not Ready?<br/>Resources exhausted?"]
+        C2["kubectl describe node<br/>Check conditions"]
         C1 --> C2
     end
 ```

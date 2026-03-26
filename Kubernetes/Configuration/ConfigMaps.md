@@ -15,10 +15,10 @@ Without ConfigMaps, you'd have to bake configuration directly into your containe
 
 ```mermaid
 graph TD
-    CM["ConfigMap\n\nkey1: value1\nkey2: value2\napp.conf: server.port=8080 ..."]
-    CM --> Env["Env Vars\nin Pod"]
-    CM --> Vol["Volume Mount\n(files) in Pod"]
-    CM --> Args["Command Args\nin Pod"]
+    CM["ConfigMap<br/><br/>key1: value1<br/>key2: value2<br/>app.conf: server.port=8080 ..."]
+    CM --> Env["Env Vars<br/>in Pod"]
+    CM --> Vol["Volume Mount<br/>(files) in Pod"]
+    CM --> Args["Command Args<br/>in Pod"]
 ```
 
 ## Creating ConfigMaps

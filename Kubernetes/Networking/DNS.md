@@ -14,12 +14,12 @@ Every Kubernetes cluster runs a DNS server — **CoreDNS** — as a Deployment i
 ```mermaid
 graph TD
     subgraph kube-system
-        CD1["CoreDNS Pod"] --> SVC["kube-dns\n10.96.0.10\nClusterIP Service"]
+        CD1["CoreDNS Pod"] --> SVC["kube-dns<br/>10.96.0.10<br/>ClusterIP Service"]
         CD2["CoreDNS Pod"] --> SVC
-        DEP["Deployment\n(2 replicas)"] -.-> CD1
+        DEP["Deployment<br/>(2 replicas)"] -.-> CD1
         DEP -.-> CD2
     end
-    SVC -.-|"the IP Pods use in\n/etc/resolv.conf"| SVC
+    SVC -.-|"the IP Pods use in<br/>/etc/resolv.conf"| SVC
 ```
 
 The kubelet configures each Pod's `/etc/resolv.conf` to point to the `kube-dns` Service IP so that all DNS queries from Pods flow to CoreDNS.

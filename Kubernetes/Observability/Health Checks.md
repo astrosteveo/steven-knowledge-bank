@@ -23,12 +23,12 @@ Without probes, users hit broken Pods, cascading failures go undetected, and on-
 
 ```mermaid
 flowchart TD
-    A[Container starts] --> B[startupProbe\noptional]
-    B -- Failing? --> C[Container killed\nand restarted]
-    B -- Succeeds once --> D[livenessProbe\nongoing]
-    D -- Failing? --> E[Container killed\nand restarted]
-    D -- Runs in parallel --> F[readinessProbe\nongoing]
-    F -- Failing? --> G[Removed from\nService endpoints\nno traffic]
+    A[Container starts] --> B[startupProbe<br/>optional]
+    B -- Failing? --> C[Container killed<br/>and restarted]
+    B -- Succeeds once --> D[livenessProbe<br/>ongoing]
+    D -- Failing? --> E[Container killed<br/>and restarted]
+    D -- Runs in parallel --> F[readinessProbe<br/>ongoing]
+    F -- Failing? --> G[Removed from<br/>Service endpoints<br/>no traffic]
 ```
 
 | Probe | Question it answers | On failure | Runs when |

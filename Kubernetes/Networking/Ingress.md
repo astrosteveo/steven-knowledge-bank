@@ -13,7 +13,7 @@ An Ingress is a Kubernetes API object that manages **external HTTP and HTTPS acc
 
 ```mermaid
 graph TD
-    Internet --> IC["Ingress Controller\n(NGINX, Traefik)"]
+    Internet --> IC["Ingress Controller<br/>(NGINX, Traefik)"]
     IC -->|"/api/*"| API["api-svc"]
     IC -->|"/web/*"| WEB["web-svc"]
     IC -->|"/docs/*"| DOC["doc-svc"]
@@ -373,9 +373,9 @@ The **Gateway API** is a collection of newer Kubernetes resources (`Gateway`, `H
 
 ```mermaid
 graph TD
-    GC["GatewayClass\n(like StorageClass)"] -->|"Infrastructure provider\ndefines this"| GW["Gateway\n(listeners, addresses)"]
-    GW -->|"Cluster operator\nconfigures listeners"| RT["HTTPRoute / GRPCRoute / TCPRoute"]
-    RT -.-|"Application developer\ndefines routing"| RT
+    GC["GatewayClass<br/>(like StorageClass)"] -->|"Infrastructure provider<br/>defines this"| GW["Gateway<br/>(listeners, addresses)"]
+    GW -->|"Cluster operator<br/>configures listeners"| RT["HTTPRoute / GRPCRoute / TCPRoute"]
+    RT -.-|"Application developer<br/>defines routing"| RT
 ```
 
 ### Basic HTTPRoute Example

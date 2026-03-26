@@ -14,11 +14,11 @@ topic: Security
 ```mermaid
 graph LR
     subgraph Namespaced
-        S1["Subject\n(User / Group / SA)"] --- RB["RoleBinding"]
+        S1["Subject<br/>(User / Group / SA)"] --- RB["RoleBinding"]
         RB --- R["Role"]
     end
     subgraph Cluster-wide
-        S2["Subject\n(User / Group / SA)"] --- CRB["ClusterRoleBinding"]
+        S2["Subject<br/>(User / Group / SA)"] --- CRB["ClusterRoleBinding"]
         CRB --- CR["ClusterRole"]
     end
 ```
@@ -235,9 +235,9 @@ Kubernetes ships with several default ClusterRoles. The four most important ones
 
 ```mermaid
 graph TD
-    CA["cluster-admin"] -->|superset of| A["admin\ncan manage Roles/RoleBindings"]
-    A -->|superset of| E["edit\ncan read/write workloads, configmaps, secrets"]
-    E -->|superset of| V["view\nread-only (no Secrets)"]
+    CA["cluster-admin"] -->|superset of| A["admin<br/>can manage Roles/RoleBindings"]
+    A -->|superset of| E["edit<br/>can read/write workloads, configmaps, secrets"]
+    E -->|superset of| V["view<br/>read-only (no Secrets)"]
 ```
 
 Other notable default ClusterRoles:

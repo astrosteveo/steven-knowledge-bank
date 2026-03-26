@@ -20,8 +20,8 @@ Think of a Pod as a logical host for tightly coupled containers that need to wor
 ```mermaid
 graph TD
     subgraph Pod["Pod (10.244.1.5)"]
-        A["Container A\n(app)\nport 8080"]
-        B["Container B\n(sidecar)\nport 9090"]
+        A["Container A<br/>(app)<br/>port 8080"]
+        B["Container B<br/>(sidecar)<br/>port 9090"]
         V["Shared Volume: /var/log/app"]
         A -- localhost --- B
         A --- V
@@ -217,7 +217,7 @@ An auxiliary container that extends or enhances the main container without the m
 ```mermaid
 graph LR
     subgraph Pod
-        A[App] -->|shared volume: /logs| S[Log Shipper\nsidecar]
+        A[App] -->|shared volume: /logs| S[Log Shipper<br/>sidecar]
     end
     S --> E[External logging]
 ```
@@ -231,9 +231,9 @@ A proxy container that simplifies access to external services on behalf of the m
 ```mermaid
 graph LR
     subgraph Pod
-        A["App\nlocalhost:5432"] -->|localhost| P["Ambassador\n(proxy)\n:5432"]
+        A["App<br/>localhost:5432"] -->|localhost| P["Ambassador<br/>(proxy)<br/>:5432"]
     end
-    P --> D["Database cluster\n(routes to correct shard)"]
+    P --> D["Database cluster<br/>(routes to correct shard)"]
 ```
 
 **Examples:** database proxies (PgBouncer, Cloud SQL Auth Proxy), service mesh proxies.
@@ -245,9 +245,9 @@ A container that transforms the output of the main container into a standardized
 ```mermaid
 graph LR
     subgraph Pod
-        A["App\n(custom logs)"] --> Ad["Adapter\n(transforms to metrics)"]
+        A["App<br/>(custom logs)"] --> Ad["Adapter<br/>(transforms to metrics)"]
     end
-    Ad --> P["Prometheus\n(/metrics)"]
+    Ad --> P["Prometheus<br/>(/metrics)"]
 ```
 
 **Examples:** Prometheus exporters, log format converters.

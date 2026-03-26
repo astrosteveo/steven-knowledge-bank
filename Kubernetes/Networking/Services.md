@@ -41,10 +41,10 @@ A **Service** provides a stable virtual IP (the *ClusterIP*) and DNS name that r
 
 ```mermaid
 graph TD
-    SVC["Service VIP\n10.96.0.50:80\nmy-svc.ns.svc"]
-    SVC --> PA["Pod A\n10.244.1.2"]
-    SVC --> PB["Pod B\n10.244.2.5"]
-    SVC --> PC["Pod C\n10.244.1.7"]
+    SVC["Service VIP<br/>10.96.0.50:80<br/>my-svc.ns.svc"]
+    SVC --> PA["Pod A<br/>10.244.1.2"]
+    SVC --> PB["Pod B<br/>10.244.2.5"]
+    SVC --> PC["Pod C<br/>10.244.1.7"]
 ```
 
 ## Service Types

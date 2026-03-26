@@ -24,8 +24,8 @@ flowchart TD
     WebSvc --> Web0["web-0"]
     WebSvc --> Web1["web-1"]
     WebSvc --> Web2["web-2"]
-    Web0 & Web1 & Web2 --> DbSvc["db Service\n(headless)"]
-    DbSvc --> Db0["db-0\nStatefulSet\n(PVC)"]
+    Web0 & Web1 & Web2 --> DbSvc["db Service<br/>(headless)"]
+    DbSvc --> Db0["db-0<br/>StatefulSet<br/>(PVC)"]
 ```
 
 **Web Deployment and Service:**
@@ -276,7 +276,7 @@ An ambassador container proxies outbound connections from the application contai
 ```mermaid
 flowchart LR
     subgraph Pod
-        App["app"] --> Amb["ambassador\n(envoy)"]
+        App["app"] --> Amb["ambassador<br/>(envoy)"]
     end
     Amb --> Ext["external API"]
 ```
@@ -321,8 +321,8 @@ Run two identical environments (blue and green). Only one receives live traffic 
 
 ```mermaid
 flowchart TD
-    Svc["Service\nselector: version: green"] -.->|inactive| Blue["blue (old)\nDeployment\nversion: blue"]
-    Svc -->|active| Green["green (new)\nDeployment\nversion: green"]
+    Svc["Service<br/>selector: version: green"] -.->|inactive| Blue["blue (old)<br/>Deployment<br/>version: blue"]
+    Svc -->|active| Green["green (new)<br/>Deployment<br/>version: green"]
 ```
 
 **Both Deployments share the same app label but differ by version:**

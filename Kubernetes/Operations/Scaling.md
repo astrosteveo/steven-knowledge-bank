@@ -33,9 +33,9 @@ HPA automatically adjusts the number of Pod replicas based on observed metrics. 
 
 ```mermaid
 flowchart TD
-    HPA["HPA Controller\n\n1. Query metrics\n2. Calculate desired replicas:\n desired = ceil(current * currentValue / target)\n3. Scale the target resource"]
-    HPA --> Metrics["Metrics API\n(metrics-server)"]
-    HPA --> Target["Deployment /\nReplicaSet /\nStatefulSet"]
+    HPA["HPA Controller<br/><br/>1. Query metrics<br/>2. Calculate desired replicas:<br/> desired = ceil(current * currentValue / target)<br/>3. Scale the target resource"]
+    HPA --> Metrics["Metrics API<br/>(metrics-server)"]
+    HPA --> Target["Deployment /<br/>ReplicaSet /<br/>StatefulSet"]
 ```
 
 ### Scaling Formula
@@ -163,7 +163,7 @@ VPA automatically adjusts the **CPU and memory requests/limits** on containers. 
 
 ```mermaid
 flowchart LR
-    R["Recommender\n\nAnalyzes historical\nresource usage and\nproduces recommendations"] --> U["Updater\n\nEvicts Pods that\nare outside the\nrecommended range"] --> A["Admission Controller\n\nSets requests on\nnewly created Pods"]
+    R["Recommender<br/><br/>Analyzes historical<br/>resource usage and<br/>produces recommendations"] --> U["Updater<br/><br/>Evicts Pods that<br/>are outside the<br/>recommended range"] --> A["Admission Controller<br/><br/>Sets requests on<br/>newly created Pods"]
 ```
 
 ### VPA YAML Manifest
@@ -219,9 +219,9 @@ The Cluster Autoscaler adjusts the **number of nodes** in a cluster. It works wi
 
 ```mermaid
 flowchart TD
-    Pending["Pod stuck in\nPending state"] --> CA["Cluster Autoscaler\ndetects unschedulable Pods"]
-    CA --> Up["Scale Up\n\nAdd nodes to\naccommodate\npending Pods"]
-    CA --> Down["Scale Down\n\nRemove under-\nutilized nodes"]
+    Pending["Pod stuck in<br/>Pending state"] --> CA["Cluster Autoscaler<br/>detects unschedulable Pods"]
+    CA --> Up["Scale Up<br/><br/>Add nodes to<br/>accommodate<br/>pending Pods"]
+    CA --> Down["Scale Down<br/><br/>Remove under-<br/>utilized nodes"]
 ```
 
 ### How It Works

@@ -1,0 +1,10 @@
+/* Constrain Mermaid diagrams to fit within the note pane */
+.mermaid-container {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.mermaid-container svg {
+  max-width: 100%;
+  height: auto;
+}

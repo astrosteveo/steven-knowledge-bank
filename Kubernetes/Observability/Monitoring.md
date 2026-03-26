@@ -14,18 +14,18 @@ Kubernetes monitoring is built on a pipeline that collects metrics at different 
 ```mermaid
 flowchart LR
     subgraph Container Level
-        cAdvisor["cAdvisor\n(in kubelet)"]
+        cAdvisor["cAdvisor<br/>(in kubelet)"]
     end
     subgraph Node Level
-        MetricsServer["metrics-server\n(aggregator)"]
+        MetricsServer["metrics-server<br/>(aggregator)"]
     end
     subgraph Cluster Level
-        KubectlTop["kubectl top\nHPA decisions"]
+        KubectlTop["kubectl top<br/>HPA decisions"]
     end
     cAdvisor --> MetricsServer --> KubectlTop
-    cAdvisor -- also scraped by --> Prometheus["Prometheus\n(scrapes all /metrics)"]
-    Prometheus --> Grafana["Grafana\n(dashboards)"]
-    Prometheus --> Alertmanager["Alertmanager\n(notifications)"]
+    cAdvisor -- also scraped by --> Prometheus["Prometheus<br/>(scrapes all /metrics)"]
+    Prometheus --> Grafana["Grafana<br/>(dashboards)"]
+    Prometheus --> Alertmanager["Alertmanager<br/>(notifications)"]
 ```
 
 ### cAdvisor

@@ -1,4 +1,7 @@
 {
   "accentColor": "#6babff",
-  "baseFontSizeAction": true
+  "baseFontSizeAction": true,
+  "enabledCssSnippets": [
+    "mermaid-fit"
+  ]
 }

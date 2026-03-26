@@ -94,7 +94,7 @@ flowchart LR
         direction TB
         V1A["v1: 3 pods ███ ███ ███"]
     end
-    subgraph Step2["Step 2: Start rollout\nmaxSurge=1, maxUnavailable=0"]
+    subgraph Step2["Step 2: Start rollout<br/>maxSurge=1, maxUnavailable=0"]
         direction TB
         V1B["v1: 3 pods ███ ███ ███"]
         V2A["v2: 1 pod starting ░░░"]

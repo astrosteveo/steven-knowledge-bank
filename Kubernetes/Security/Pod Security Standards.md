@@ -13,9 +13,9 @@ topic: Security
 
 ```mermaid
 graph LR
-    P["**Privileged**\nNo restrictions at all\n(system/infra workloads)"]
-    B["**Baseline**\nPrevents known\nprivilege escalations\n(general purpose workloads)"]
-    R["**Restricted**\nHeavily locked down\nfollowing hardening\nbest practices\n(security-sensitive apps)"]
+    P["**Privileged**<br/>No restrictions at all<br/>(system/infra workloads)"]
+    B["**Baseline**<br/>Prevents known<br/>privilege escalations<br/>(general purpose workloads)"]
+    R["**Restricted**<br/>Heavily locked down<br/>following hardening<br/>best practices<br/>(security-sensitive apps)"]
     P -- "More restrictive →" --> B -- "More restrictive →" --> R
 ```
 
@@ -61,9 +61,9 @@ PSA operates at the **namespace level** -- you apply labels to a namespace to de
 
 ```mermaid
 flowchart TD
-    A["kubectl apply namespace labels"] --> NS["Namespace: prod\nlabels: pod-security.enforce=restricted"]
+    A["kubectl apply namespace labels"] --> NS["Namespace: prod<br/>labels: pod-security.enforce=restricted"]
     REQ["Pod creation request"] --> NS
-    NS --> CHECK{"Does the Pod spec violate\nthe 'restricted' standard?"}
+    NS --> CHECK{"Does the Pod spec violate<br/>the 'restricted' standard?"}
     CHECK -- YES --> REJECT["Reject the Pod"]
     CHECK -- NO --> ADMIT["Admit the Pod"]
 ```

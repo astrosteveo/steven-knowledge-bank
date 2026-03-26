@@ -16,18 +16,18 @@ flowchart TD
     subgraph Cluster
         subgraph Node
             subgraph Pod
-                Container["Container\napp writes to\nstdout / stderr"]
+                Container["Container<br/>app writes to<br/>stdout / stderr"]
             end
-            LogFile["/var/log/containers/\ncontainer log file"]
+            LogFile["/var/log/containers/<br/>container log file"]
             Kubelet["kubelet handles log rotation"]
             subgraph DaemonSet["Logging Agent DaemonSet"]
-                Agent["Reads log files\nParses, enriches, ships"]
+                Agent["Reads log files<br/>Parses, enriches, ships"]
             end
             Container --> LogFile
             LogFile --> Kubelet
             LogFile --> Agent
         end
-        Backend["Log Backend\n(Elasticsearch, Loki, etc.)"]
+        Backend["Log Backend<br/>(Elasticsearch, Loki, etc.)"]
         Agent --> Backend
     end
 ```
@@ -137,11 +137,11 @@ The most common and recommended approach. A logging agent runs as a DaemonSet on
 ```mermaid
 flowchart TD
     subgraph Node
-        PodA["Pod A\nstdout/stderr"] --> LogFiles["/var/log/containers/*.log"]
-        PodB["Pod B\nstdout/stderr"] --> LogFiles
-        LogFiles --> Agent["Logging Agent DaemonSet\ne.g., Fluent Bit"]
+        PodA["Pod A<br/>stdout/stderr"] --> LogFiles["/var/log/containers/*.log"]
+        PodB["Pod B<br/>stdout/stderr"] --> LogFiles
+        LogFiles --> Agent["Logging Agent DaemonSet<br/>e.g., Fluent Bit"]
     end
-    Agent --> Backend["Log Backend\n(Elasticsearch, Loki, etc.)"]
+    Agent --> Backend["Log Backend<br/>(Elasticsearch, Loki, etc.)"]
 ```
 
 **Pros:** No application changes needed. Low resource overhead per node. Works for all Pods automatically.

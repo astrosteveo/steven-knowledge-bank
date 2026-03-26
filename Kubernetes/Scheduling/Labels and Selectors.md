@@ -205,7 +205,7 @@ spec:
 
 ```mermaid
 graph TD
-    SVC["frontend-svc\n(ClusterIP)"]
+    SVC["frontend-svc<br/>(ClusterIP)"]
     SVC -->|"selector: app=web-frontend, tier=frontend"| P1["Pod"]
     SVC --> P2["Pod"]
     SVC --> P3["Pod"]
