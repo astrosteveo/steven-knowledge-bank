@@ -9,24 +9,17 @@ topic: Architecture
 
 Every worker node in a Kubernetes cluster runs three essential components: the **kubelet**, **kube-proxy**, and a **container runtime**. Together they are responsible for running Pods, managing networking, and reporting status back to the control plane.
 
-```
-  +-----------------------------------------------------------+
-  |                      WORKER NODE                          |
-  |                                                           |
-  |  +--------+    +----------+    +--------------------+     |
-  |  | kubelet |    |kube-proxy|    | container runtime  |     |
-  |  |         |    |          |    | (containerd/CRI-O) |     |
-  |  +----+---+    +-----+----+    +---------+----------+     |
-  |       |              |                   |                |
-  |       |   manages    |  configures       |  runs          |
-  |       |   pod        |  network          |  containers    |
-  |       |   lifecycle  |  rules            |                |
-  |       v              v                   v                |
-  |  +---------+   +----------+   +-----+  +-----+  +-----+  |
-  |  | Pod     |   | iptables |   | ctr |  | ctr |  | ctr |  |
-  |  | Specs   |   | or IPVS  |   +-----+  +-----+  +-----+  |
-  |  +---------+   +----------+                               |
-  +-----------------------------------------------------------+
+```mermaid
+flowchart TD
+    subgraph NODE["WORKER NODE"]
+        KUBELET[kubelet]
+        PROXY[kube-proxy]
+        CRT["container runtime<br>(containerd/CRI-O)"]
+
+        KUBELET -->|"manages pod lifecycle"| PODS[Pod Specs]
+        PROXY -->|"configures network rules"| IPTABLES["iptables or IPVS"]
+        CRT -->|"runs containers"| C1[ctr] & C2[ctr] & C3[ctr]
+    end
 ```
 
 ## kubelet
@@ -185,12 +178,12 @@ The container runtime is the software responsible for pulling images and running
 
 CRI is a gRPC-based API that the kubelet uses to communicate with any compatible container runtime. This abstraction means Kubernetes is not tied to any specific runtime.
 
-```
-  kubelet  ──── CRI (gRPC) ────>  Container Runtime
-                                     |
-                                     ├── containerd
-                                     ├── CRI-O
-                                     └── (any CRI-compliant runtime)
+```mermaid
+graph LR
+    kubelet -->|"CRI (gRPC)"| CR[Container Runtime]
+    CR --> containerd
+    CR --> CRI-O
+    CR --> OTHER["(any CRI-compliant runtime)"]
 ```
 
 CRI defines two services:
