@@ -88,22 +88,32 @@ spec:
 
 The default strategy. New Pods are gradually created while old Pods are gradually terminated:
 
-```
-Time ──►
-
-ReplicaSet v1:  ███ ███ ███             (3 pods)
-                                         maxSurge=1, maxUnavailable=0
-ReplicaSet v1:  ███ ███ ███             (still 3 — no unavailable allowed)
-ReplicaSet v2:  ░░░                     (1 new pod starting)
-
-ReplicaSet v1:  ███ ███                 (v2 pod ready, scale down v1)
-ReplicaSet v2:  ███ ░░░                 (1 ready, 1 starting)
-
-ReplicaSet v1:  ███                     (continue scaling down)
-ReplicaSet v2:  ███ ███ ░░░            (2 ready, 1 starting)
-
-ReplicaSet v1:                          (fully scaled down)
-ReplicaSet v2:  ███ ███ ███            (3 pods, rollout complete)
+```mermaid
+flowchart LR
+    subgraph Step1["Step 1: Initial state"]
+        direction TB
+        V1A["v1: 3 pods ███ ███ ███"]
+    end
+    subgraph Step2["Step 2: Start rollout\nmaxSurge=1, maxUnavailable=0"]
+        direction TB
+        V1B["v1: 3 pods ███ ███ ███"]
+        V2A["v2: 1 pod starting ░░░"]
+    end
+    subgraph Step3["Step 3: v2 pod ready"]
+        direction TB
+        V1C["v1: 2 pods ███ ███"]
+        V2B["v2: 1 ready, 1 starting ███ ░░░"]
+    end
+    subgraph Step4["Step 4: Continue"]
+        direction TB
+        V1D["v1: 1 pod ███"]
+        V2C["v2: 2 ready, 1 starting ███ ███ ░░░"]
+    end
+    subgraph Step5["Step 5: Complete"]
+        direction TB
+        V2D["v2: 3 pods ███ ███ ███"]
+    end
+    Step1 --> Step2 --> Step3 --> Step4 --> Step5
 ```
 
 ### maxSurge and maxUnavailable

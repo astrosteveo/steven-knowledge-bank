@@ -11,21 +11,15 @@ topic: Networking
 
 Every Kubernetes cluster runs a DNS server — **CoreDNS** — as a Deployment in the `kube-system` namespace. It watches the Kubernetes API for new Services and Pods, then automatically creates DNS records for them.
 
-```
-┌──────────────────────────────────────────────────────┐
-│                    kube-system                        │
-│                                                      │
-│  ┌────────────┐      ┌────────────┐                  │
-│  │  CoreDNS   │      │  CoreDNS   │   Deployment     │
-│  │  Pod       │      │  Pod       │   (2 replicas)   │
-│  └─────┬──────┘      └─────┬──────┘                  │
-│        └──────┬─────────────┘                        │
-│               ▼                                      │
-│        ┌─────────────┐                               │
-│        │ kube-dns    │  ClusterIP Service             │
-│        │ 10.96.0.10  │  (the IP pods use in           │
-│        └─────────────┘   /etc/resolv.conf)           │
-└──────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph kube-system
+        CD1["CoreDNS Pod"] --> SVC["kube-dns\n10.96.0.10\nClusterIP Service"]
+        CD2["CoreDNS Pod"] --> SVC
+        DEP["Deployment\n(2 replicas)"] -.-> CD1
+        DEP -.-> CD2
+    end
+    SVC -.-|"the IP Pods use in\n/etc/resolv.conf"| SVC
 ```
 
 The kubelet configures each Pod's `/etc/resolv.conf` to point to the `kube-dns` Service IP so that all DNS queries from Pods flow to CoreDNS.

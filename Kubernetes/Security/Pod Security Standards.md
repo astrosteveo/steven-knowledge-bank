@@ -11,21 +11,12 @@ topic: Security
 
 **Pod Security Standards** (PSS) define three levels of security policies that cover the spectrum from permissive to heavily restricted. They are the official replacement for PodSecurityPolicy (PSP), which was deprecated in Kubernetes 1.21 and removed in 1.25.
 
-```
-  Most permissive                                    Most restrictive
-  ◄──────────────────────────────────────────────────────────────────►
-
-  +------------------+    +------------------+    +------------------+
-  |   Privileged     |    |    Baseline      |    |   Restricted     |
-  |                  |    |                  |    |                  |
-  |  No restrictions |    | Prevents known   |    | Heavily locked   |
-  |  at all          |    | privilege        |    | down following   |
-  |                  |    | escalations      |    | hardening best   |
-  |  (system/infra   |    |                  |    | practices        |
-  |   workloads)     |    | (general purpose |    |                  |
-  |                  |    |  workloads)      |    | (security-       |
-  |                  |    |                  |    |  sensitive apps)  |
-  +------------------+    +------------------+    +------------------+
+```mermaid
+graph LR
+    P["**Privileged**\nNo restrictions at all\n(system/infra workloads)"]
+    B["**Baseline**\nPrevents known\nprivilege escalations\n(general purpose workloads)"]
+    R["**Restricted**\nHeavily locked down\nfollowing hardening\nbest practices\n(security-sensitive apps)"]
+    P -- "More restrictive →" --> B -- "More restrictive →" --> R
 ```
 
 ## What Each Level Allows and Restricts
@@ -68,22 +59,13 @@ Follows current Pod hardening best practices. Requires non-root execution, drops
 
 PSA operates at the **namespace level** -- you apply labels to a namespace to declare which security level and enforcement mode to use.
 
-```
-  kubectl apply namespace labels
-            │
-            ▼
-  +--------------------+
-  | Namespace: prod    |
-  | labels:            |
-  |   pod-security     |      Pod creation request
-  |   .enforce=        | ◄──────────────────────────
-  |   restricted       |
-  +--------------------+
-            │
-            ▼
-  Does the Pod spec violate        ┌── YES ──► Reject the Pod
-  the "restricted" standard? ──────┤
-                                   └── NO  ──► Admit the Pod
+```mermaid
+flowchart TD
+    A["kubectl apply namespace labels"] --> NS["Namespace: prod\nlabels: pod-security.enforce=restricted"]
+    REQ["Pod creation request"] --> NS
+    NS --> CHECK{"Does the Pod spec violate\nthe 'restricted' standard?"}
+    CHECK -- YES --> REJECT["Reject the Pod"]
+    CHECK -- NO --> ADMIT["Admit the Pod"]
 ```
 
 ### Enforcement Modes

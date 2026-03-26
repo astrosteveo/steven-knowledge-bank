@@ -13,21 +13,12 @@ A ConfigMap is a Kubernetes object that stores **non-sensitive configuration dat
 
 Without ConfigMaps, you'd have to bake configuration directly into your container image (hardcoded values, bundled config files) or pass everything through lengthy environment variable lists in your Pod spec. ConfigMaps solve this by letting you define configuration once and inject it into any number of Pods.
 
-```
-┌──────────────────────────────────────────────────┐
-│                  ConfigMap                         │
-│                                                    │
-│   key1: value1                                     │
-│   key2: value2                                     │
-│   app.conf: |                                      │
-│     server.port=8080                               │
-│     server.host=0.0.0.0                            │
-│                                                    │
-└──────────┬────────────────┬───────────────┬────────┘
-           │                │               │
-           ▼                ▼               ▼
-      Env Vars        Volume Mount    Command Args
-      in Pod          (files) in Pod   in Pod
+```mermaid
+graph TD
+    CM["ConfigMap\n\nkey1: value1\nkey2: value2\napp.conf: server.port=8080 ..."]
+    CM --> Env["Env Vars\nin Pod"]
+    CM --> Vol["Volume Mount\n(files) in Pod"]
+    CM --> Args["Command Args\nin Pod"]
 ```
 
 ## Creating ConfigMaps

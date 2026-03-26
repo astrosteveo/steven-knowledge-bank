@@ -11,27 +11,30 @@ topic: Operations
 
 When something goes wrong in Kubernetes, follow a top-down approach:
 
-```
-Debugging Flow
+```mermaid
+flowchart TD
+    Q["Is the problem with..."]
+    Q --> App
+    Q --> Net
+    Q --> Cluster
 
-Is the problem with...
+    subgraph App["Application"]
+        A1["Pod not running?\nCrashing?\nWrong output?"]
+        A2["kubectl describe\nkubectl logs\nkubectl exec\nkubectl debug"]
+        A1 --> A2
+    end
 
-┌─────────────────────────────────────────────────────┐
-│                                                     │
-│  Application          Networking          Cluster   │
-│  ─────────           ──────────          ───────    │
-│  Pod not running?    Service not         Node not   │
-│  Crashing?           reachable?          Ready?     │
-│  Wrong output?       DNS issues?         Resources  │
-│                                          exhausted? │
-│       │                   │                  │      │
-│       ▼                   ▼                  ▼      │
-│  kubectl describe    Check endpoints    kubectl     │
-│  kubectl logs        Check DNS          describe    │
-│  kubectl exec        Test from inside   node        │
-│  kubectl debug       the cluster        Check       │
-│                                         conditions  │
-└─────────────────────────────────────────────────────┘
+    subgraph Net["Networking"]
+        N1["Service not reachable?\nDNS issues?"]
+        N2["Check endpoints\nCheck DNS\nTest from inside\nthe cluster"]
+        N1 --> N2
+    end
+
+    subgraph Cluster["Cluster"]
+        C1["Node not Ready?\nResources exhausted?"]
+        C2["kubectl describe node\nCheck conditions"]
+        C1 --> C2
+    end
 ```
 
 Start broad and narrow down:

@@ -21,29 +21,14 @@ Without probes, users hit broken Pods, cascading failures go undetected, and on-
 
 ## The Three Probe Types
 
-```
-  Container Lifecycle with Probes
-  ================================
-
-  Container starts
-       │
-       ▼
-  ┌─────────────┐     Failing?     Container killed
-  │ startupProbe │────────────────► and restarted
-  │ (optional)   │
-  └──────┬──────┘
-         │ Succeeds once
-         ▼
-  ┌──────────────┐    Failing?     Container killed
-  │ livenessProbe │───────────────► and restarted
-  │ (ongoing)     │
-  └──────┬───────┘
-         │ Runs in parallel
-         ▼
-  ┌───────────────┐   Failing?     Removed from
-  │ readinessProbe │──────────────► Service endpoints
-  │ (ongoing)      │               (no traffic)
-  └───────────────┘
+```mermaid
+flowchart TD
+    A[Container starts] --> B[startupProbe\noptional]
+    B -- Failing? --> C[Container killed\nand restarted]
+    B -- Succeeds once --> D[livenessProbe\nongoing]
+    D -- Failing? --> E[Container killed\nand restarted]
+    D -- Runs in parallel --> F[readinessProbe\nongoing]
+    F -- Failing? --> G[Removed from\nService endpoints\nno traffic]
 ```
 
 | Probe | Question it answers | On failure | Runs when |
