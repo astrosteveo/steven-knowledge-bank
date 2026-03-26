@@ -1,3 +1,10 @@
+---
+tags:
+  - ansible
+  - ansible/infrastructure
+topic: Infrastructure
+---
+
 # Inventory
 
 An inventory defines the hosts and groups Ansible manages. Every inventory has two implicit groups: `all` (every host) and `ungrouped` (hosts not in any named group).

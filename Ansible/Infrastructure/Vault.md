@@ -1,3 +1,12 @@
+---
+tags:
+  - ansible
+  - ansible/infrastructure
+aliases:
+  - ansible-vault
+topic: Infrastructure
+---
+
 # Vault
 
 Vault encrypts sensitive data (passwords, keys, credentials) so it can live safely in version control.
