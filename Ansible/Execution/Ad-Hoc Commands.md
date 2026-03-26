@@ -4,7 +4,6 @@ tags:
   - ansible/execution
 topic: Execution
 ---
-
 # Ad-Hoc Commands
 
 **Syntax:** `ansible <pattern> -m <module> -a "<args>"`
