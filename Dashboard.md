@@ -18,9 +18,16 @@ LIMIT 10
 
 ## Fleeting Notes Inbox
 ```dataview
-TABLE created AS "Captured"
+TABLE created AS "Captured", status AS "Status"
 FROM #fleeting
 WHERE file.name != "Welcome"
+SORT created DESC
+```
+
+## Troubleshooting Runbooks
+```dataview
+TABLE severity AS "Severity", created AS "Created"
+FROM #runbook
 SORT created DESC
 ```
 
@@ -31,6 +38,14 @@ SORT created DESC
 | [[Ansible/Ansible\|Ansible]] | Automation & configuration management |
 | [[Kubernetes/Kubernetes\|Kubernetes]] | Container orchestration |
 | [[Helm/Helm\|Helm]] | Kubernetes package management |
+
+## Recent Daily Notes
+```dataview
+LIST
+FROM #daily
+SORT created DESC
+LIMIT 7
+```
 
 ## All Tags
 ```dataview

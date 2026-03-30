@@ -1,13 +1,14 @@
 ---
-aliases: 
 tags:
   - fleeting
+  - <% tp.system.suggester(["Ansible", "Kubernetes", "Helm", "General", "Idea", "Question", "Todo"], ["ansible", "kubernetes", "helm", "general", "idea", "question", "todo"]) %>
 created: <% tp.date.now("YYYY-MM-DD") %>
-title: <% tp.file.title %>
-date created: Monday, March 30th 2026, 11:05:08 am
-date modified: Monday, March 30th 2026, 12:12:26 pm
+status: <% tp.system.suggester(["Inbox", "Processed", "Promoted"], ["inbox", "processed", "promoted"]) %>
 ---
 
 # <% tp.file.title %>
 
 <% tp.file.cursor(1) %>
+
+---
+*Captured at <% tp.date.now("HH:mm") %> — <% tp.date.now("dddd, MMMM Do YYYY") %>*

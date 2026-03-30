@@ -11,6 +11,10 @@
     {
       "folder": "Fleeting Notes",
       "template": "Templates/Fleeting Note.md"
+    },
+    {
+      "folder": "Daily Notes",
+      "template": "Templates/Daily Note.md"
     }
   ],
   "syntax_highlighting": true,
