@@ -70,12 +70,44 @@ The danger of poisoned context is uniquely severe for LLMs because of how patter
 
 ## What this means in practice
 
-The lesson here isn't "don't use memory systems." Memory is genuinely powerful and necessary for LLMs to be useful across sessions. The lesson is:
+The lesson here isn't "don't use memory systems." Auto-memory is genuinely powerful and necessary for LLMs to be useful across sessions. The lesson is that **auto-memory left unchecked will degrade your agent's performance over time**, and most people won't notice because the degradation is silent.
 
-- **Treat your memory files like production config.** They are injected into every session and shape every response. They deserve the same review discipline as any other configuration that affects system behavior.
+From firsthand experience on an active project over a weekend: Claude created well over a dozen memory files. That's not unusual — it's the expected behavior on any project with sustained activity. Each correction, each preference stated, each pattern observed gets its own memory or appended to an existing one. The accumulation is fast.
+
+### The full attack surface
+
+Memory files are the most obvious vector for context pollution, but they're not the only one. Every piece of persistent context that gets injected into the system prompt is a potential source of stale, contradictory, or diluting information:
+
+- **`~/.claude/projects/<project>/memory/`** — Auto-memory files. These accumulate fastest and have no built-in cleanup. On active projects, you can hit dozens of files within days. Each one competes for attention with everything else in the context.
+- **`.claude/rules/`** — Project rules files. These are typically written intentionally, but they can go stale too. A rule written for an early architecture decision that's since been reversed is just as poisonous as a bad memory — maybe more so, because rules feel "official" and rarely get revisited.
+- **`CLAUDE.md` files** — Both project-level and user-level (`~/.claude/CLAUDE.md`). The global user CLAUDE.md is particularly sneaky because it applies to *every* project. A preference you set six months ago for a different codebase is now injected into every session across all your work. If it contradicts a project-level rule, the model resolves the conflict probabilistically — and you'll never see it happen.
+- **Nested and inherited CLAUDE.md files** — Claude Code walks up the directory tree and loads CLAUDE.md files from parent directories. In monorepos, you can inherit instructions from other teams' directories that have nothing to do with your work.
+
+All of these sources contribute tokens to the context window. All of them compete for attention. All of them can contain stale or contradictory information. And none of them have built-in expiry, reconciliation, or conflict detection.
+
+### What to do about it
+
+- **Treat your memory and rules files like production config.** They are injected into every session and shape every response. They deserve the same review discipline as any other configuration that affects system behavior.
 - **Less is more.** Given how attention dilution works, a small number of high-quality, accurate memories will always outperform a large collection of accumulated micro-memories. Prune aggressively.
-- **Audit regularly.** Memory files should be reviewed and cleaned up periodically. Look for contradictions, stale information, and over-specific rules that were really one-time corrections.
+- **Audit regularly.** Sweep your memory directory, your rules, and your CLAUDE.md files periodically. Look for contradictions, stale information, duplicates, and over-specific rules that were really one-time corrections. This is especially important after periods of high activity where auto-memory accumulates fastest.
+- **Watch your global CLAUDE.md.** `~/.claude/CLAUDE.md` applies everywhere. Keep it minimal and genuinely universal. Anything project-specific should live in the project's own CLAUDE.md or rules.
 - **Understand the architecture.** The more you understand about how self-attention and context windows work, the better you'll be at curating what goes into them. This isn't about "prompt engineering" — it's about understanding that every token you inject is competing for attention with every other token, and that the model will do its best to reconcile all of them whether they're reconcilable or not.
+
+### An idea: memory reconciliation as a skill
+
+There's a gap in the current system: Claude can *create* memories but has no built-in mechanism to *reconcile* them. No periodic review, no deduplication pass, no conflict detection, no expiry. The result is predictable — memories accumulate monotonically until a human manually intervenes.
+
+A potential solution: a Claude Code skill (or slash command) that prompts Claude to perform a memory reconciliation. Something like `/reconcile-memory` that would:
+
+- Read all memory files in the project's memory directory
+- Identify duplicates and near-duplicates (memories serving the same context)
+- Flag contradictions (memory A says "use semicolons," memory B says "no semicolons")
+- Identify stale memories (references to files, functions, or patterns that no longer exist in the codebase)
+- Merge overlapping memories into consolidated entries
+- Remove or archive memories that are no longer relevant
+- Optionally do the same sweep across `.claude/rules/` and CLAUDE.md files
+
+This would give users a way to periodically "defragment" their context — keeping auto-memory's learning benefits while preventing the slow accumulation of toxic context that degrades every future session. The skill could even be hooked into a schedule or run automatically after a certain number of sessions or memory writes.
 
 ## Open questions: primacy vs recency at scale
 
