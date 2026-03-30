@@ -17,11 +17,31 @@ This is the old school standard way of doing things. Simply include the dependen
 The risk here is an increase in the initial container image.
 ## Build as a separate OCI image
 
-This is a recent advancement in Kubernetes, advancing to beta state in Kubernetes 1.33 (previously introduced as an Alpha feature in 1.31), and comes auto-enabled with Kubernetes 1.35 Beta. It is still maturing, but it's a feature advancing and maturing rapidly so I can understand if there is some resistance to wanting to leverage a beta feature.
+This is a recent advancement in Kubernetes over the past year and a half, advancing to beta state in Kubernetes 1.33 (previously introduced as an Alpha feature in 1.31), and comes auto-enabled with Kubernetes 1.35 Beta. That likely means it is going to mature even more once 1.35 is GA.
 
-Any directory can be built as an OCI image. In this scenario the files themselves can be built as an OCI image and then pushed to a centralized OCI repository or simply side-loaded into the cluster. Then this image is mounted to the pod using `pod.spec.volumes.image`.
+Any directory can be built as an OCI image. This would involve simply building the Python virtual environment (`./.env`) and then pushing that image to Nexus and mounting it as an Image Volume on the Pod.
 
+Here is an example what that looks like in practice:
 
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: image-volume
+spec:
+  containers:
+  - name: shell
+    command: ["sleep", "infinity"]
+    image: debian
+    volumeMounts:
+    - name: volume
+      mountPath: /volume
+  volumes:
+  - name: volume
+    image:
+      reference: quay.io/crio/artifact:v2
+      pullPolicy: IfNotPresent
+```
 
 ## Mount as NFS
 
