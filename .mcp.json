@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-obsidian": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-obsidian"
+      ],
+      "env": {}
+    }
+  }
+}
