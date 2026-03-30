@@ -77,12 +77,38 @@ The lesson here isn't "don't use memory systems." Memory is genuinely powerful a
 - **Audit regularly.** Memory files should be reviewed and cleaned up periodically. Look for contradictions, stale information, and over-specific rules that were really one-time corrections.
 - **Understand the architecture.** The more you understand about how self-attention and context windows work, the better you'll be at curating what goes into them. This isn't about "prompt engineering" — it's about understanding that every token you inject is competing for attention with every other token, and that the model will do its best to reconcile all of them whether they're reconcilable or not.
 
+## Open questions: primacy vs recency at scale
+
+The U-shaped attention curve raises a natural question: if you don't care about costs or response time — say you're using Claude Code with a 1M token context window at flat-rate pricing — and you just want the best raw output quality, how does performance at the beginning of the context compare to performance at the end?
+
+The existing research suggests the U-shape is **not symmetric** — primacy and recency are qualitatively different:
+
+- **Primacy tends to be more stable and reliable.** Cobbina & Zhou (2025) found that placing important context at the start of the system prompt yielded the most stable and accurate outputs, with accuracy gains of up to +6 points. The beginning of context is where the model looks for identity and rules — "who am I and what should I do" ([Where to show Demos in Your Prompt](https://arxiv.org/abs/2507.22887)).
+- **Recency gets high attention but is more volatile.** Placing critical information at the end of the user message flipped over 30% of predictions *without improving correctness* in QA tasks. The end of context is where the model looks for "what do I need to do right now" — it gets strong attention, but that attention is reactive rather than grounding.
+- **The optimal position is task-specific and model-size-specific.** For larger models (72B parameters), end-of-message placement sometimes overtook start-of-system-prompt. For smaller models, the beginning dominated consistently. This means any general rule about "beginning vs end" will have exceptions.
+- **Transformers develop the same primacy/recency effects as human episodic memory.** Mistry et al. (2025) showed that these aren't just metaphors — transformers trained on language develop measurably the same temporal biases (primacy, recency, and contiguity) that cognitive scientists observe in human memory experiments. Recency effects are directly shaped by the magnitude of positional encoding and emerge gradually during training ([Emergence of Episodic Memory in Transformers](https://arxiv.org/abs/2502.06902)).
+
+**The honest gap in the research: nobody has tested this at 1M token scale in agentic workflows.** The foundational studies tested at 4K-32K tokens. NoLiMa pushed to 128K. While 1M token contexts have existed since Gemini 1.5 Pro shipped in early 2024, having that context length available in sustained, tool-heavy, multi-turn coding sessions (like Claude Code's recent 1M support) is a different beast — and not something many people are running at that scale, let alone studying rigorously.
+
+At 1M tokens, the distance between the primacy zone and the recency zone is enormous — potentially 800K+ tokens of middle. Open questions that the literature hasn't answered yet:
+
+- Does the primacy signal survive across 800K tokens of middle, or does it decay in ways not captured by shorter-context studies?
+- Does recency dominate at extreme scale simply because the beginning is so far away?
+- How do the sparse attention and approximation techniques that *must* be used at 1M scale (you can't do naive O(n²) at that length) change the shape of the U-curve?
+- For agentic coding workflows specifically — where 10-15% of the context is consumed by system prompts and tool descriptions before the first user message — does that initial overhead push your actual working context further into the degradation zone, or does it benefit from primacy positioning?
+
+These are empirically testable questions, but as of early 2026, the academic literature hasn't caught up to the context lengths that production models now support. What we know about the U-shape at 32K may not extrapolate cleanly to 1M.
+
 ## References
 
 - Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., & Liang, P. (2023). *Lost in the Middle: How Language Models Use Long Contexts*. arXiv:2307.03172. [Paper](https://arxiv.org/abs/2307.03172) | [HF](https://huggingface.co/papers/2307.03172)
 - Ebrahimi, M. R., Panchal, S., & Memisevic, R. (2024). *Your Context Is Not an Array: Unveiling Random Access Limitations in Transformers*. arXiv:2408.05506. [Paper](https://arxiv.org/abs/2408.05506) | [HF](https://huggingface.co/papers/2408.05506)
 - Meyer, M., Michelessa, M., Chaux, C., & Tan, V. Y. F. (2025). *Memory Limitations of Prompt Tuning in Transformers*. arXiv:2509.00421. [Paper](https://arxiv.org/abs/2509.00421) | [HF](https://huggingface.co/papers/2509.00421)
+- Hsieh, C.-Y., Chuang, Y.-S., Li, C.-L., Wang, Z., Le, L. T., Kumar, A., Glass, J., Ratner, A., Lee, C.-Y., Krishna, R., & Pfister, T. (2024). *Found in the Middle: Calibrating Positional Attention Bias Improves Long Context Utilization*. arXiv:2406.16008. [Paper](https://arxiv.org/abs/2406.16008) | [HF](https://huggingface.co/papers/2406.16008)
+- Sun, Y., Li, Z., Zhang, Y., Pan, T., Dong, B., Guo, Y., & Wang, J. (2025). *Efficient Attention Mechanisms for Large Language Models: A Survey*. arXiv:2507.19595. [Paper](https://arxiv.org/abs/2507.19595) | [HF](https://huggingface.co/papers/2507.19595)
 - Deilamsalehy, H., Dernoncourt, F., Bui, T., Rossi, R., Yoon, S., & Schütze, H. (2025). *NoLiMa: Long-Context Evaluation Beyond Literal Matching*. arXiv:2502.05167. [Paper](https://arxiv.org/abs/2502.05167) | [HF](https://huggingface.co/papers/2502.05167)
+- Cobbina, K. & Zhou, T. (2025). *Where to show Demos in Your Prompt: A Positional Bias of In-Context Learning*. arXiv:2507.22887. [Paper](https://arxiv.org/abs/2507.22887) | [HF](https://huggingface.co/papers/2507.22887)
+- Mistry, D. M., Bajaj, A., Aggarwal, Y., Maini, S. S., & Tiganj, Z. (2025). *Emergence of Episodic Memory in Transformers*. arXiv:2502.06902. [Paper](https://arxiv.org/abs/2502.06902) | [HF](https://huggingface.co/papers/2502.06902)
 
 ---
 
