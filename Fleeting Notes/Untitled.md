@@ -8,9 +8,8 @@ status: inbox
 
 # Auto-Memory
 
-Auto-Memory was recently introduced to CC where the agent will save lessons learned to a file. Starting with a `MEMORY.md` file inside the `~/.claude/projects/-path-to-project-/memory/MEMORY.md`, and then serving as an index file with pointers to individual memory files to keep it under 200 lines.
+Auto-Memory was recently introduced to CC where the agent will save lessons learned to a file. Starting with a `MEMORY.md` file inside the `~/.claude/projects/-path-to-project-/memory/MEMORY.md`, which serves as an index file with pointers to individual memory files to keep it under 200 lines,
 
-It uses the syntax of `- [filename](filename.md) - Description of memory`, and inside the file itself is the rule with frontmatter.
 
 
 - Auto-memory auto accumulates over time
