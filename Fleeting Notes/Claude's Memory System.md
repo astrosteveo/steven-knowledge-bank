@@ -15,7 +15,13 @@ date modified: Monday, March 30th 2026, 1:32:21 pm
 
 LLMs do not have organic memory like humans do. You tell a human something, and the next visit they can recall and remember that piece of context. LLMs have no persistent memory bank to draw from — every session starts from zero. Whatever "memory" they have is whatever gets loaded into their context window at the start of a conversation.
 
-This is not a limitation that can be patched around. It is a direct consequence of how Transformer-based models work, and understanding *why* makes it easier to see where things go wrong.
+As with other things in silicon, it's something we have to simulate. We have to provide mechanisms the model can use to simulate some sort of memory persistence. In `*.md` files is a standard convention that has been popularized. It is native to what LLM's is trained on (large amounts of text data, often just sourced right from the Internet), and provides low overhead with read tools.
+
+This is not a limitation that can be patched around, although it is something that we've been trying to do ever since the first time we interacted with LLM's and started wondering "How do I get this thing to remember what we just talked about?"
+
+For those who have used LLM's ever since they were only chat bots in a website remember you would type a prompt to the LLM and it would spit out some code. You would then have to copy the code, create the file, and paste the code into the file and save. The problems would arise when you would hit that small 32K context window and the chat would need to be restarted. Now, if you asked the LLM to extend on that file you had to copy the file, and paste it back to the LLM as context. Eventually, the codebase would get so large you could not fit the code and expect a full response back 
+
+It is a direct consequence of how Transformer-based models work, and understanding *why* makes it easier to see where things go wrong. It is by design, and later you'll find out why, and why it's so important to keep prompts to a minimum. Your LLM doesn't need to know every thing you talked about last session.
 
 ## How Transformers actually "remember"
 
