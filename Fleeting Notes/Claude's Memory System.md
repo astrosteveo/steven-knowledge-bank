@@ -19,9 +19,13 @@ As with other things in silicon, it's something we have to simulate. We have to 
 
 This is not a limitation that can be patched around, although it is something that we've been trying to do ever since the first time we interacted with LLM's and started wondering "How do I get this thing to remember what we just talked about?"
 
-For those who have used LLM's ever since they were only chat bots in a website remember you would type a prompt to the LLM and it would spit out some code. You would then have to copy the code, create the file, and paste the code into the file and save. The problems would arise when you would hit that small 32K context window and the chat would need to be restarted. Now, if you asked the LLM to extend on that file you had to copy the file, and paste it back to the LLM as context. Eventually, the codebase would get so large you could not fit the code and expect a full response back 
+For those who have used LLM's ever since they were only chat bots in a website remember you would type a prompt to the LLM and it would spit out some code. You would then have to copy the code, create the file, and paste the code into the file and save. The problems would arise when you would hit that small 32K context window and the chat would need to be restarted. Now, if you asked the LLM to extend on that file you had to copy the file, and paste it back to the LLM as context. Eventually, the codebase would get so large you could not fit the code and expect a full response back out. Messages would be fragmented, because you'd hit the model output token limit as well. It was a constant back and forth.
 
-It is a direct consequence of how Transformer-based models work, and understanding *why* makes it easier to see where things go wrong. It is by design, and later you'll find out why, and why it's so important to keep prompts to a minimum. Your LLM doesn't need to know every thing you talked about last session.
+Then we finally got actual tools where the model could read the filesystem, and that solved the dilemma of copy and pasta back and forth, but there was another problem that we're still yet to successfully crack today, even though we are very close. 
+
+Claude has one of the more robust, dynamic memory systems and that's exactly what I'll talk about here in this document, but before I do I must preface this by stating the following:
+
+> It is a direct consequence of how Transformer-based models work, and understanding *why* makes it easier to see where things go wrong. It is by design, and later you'll find out why, and why it's so important to keep prompts to a minimum. Your LLM doesn't need to know every thing you talked about last session.
 
 ## How Transformers actually "remember"
 
