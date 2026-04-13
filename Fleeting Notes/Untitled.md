@@ -5,9 +5,19 @@ tags:
 created: 2026-04-13
 status: inbox
 ---
-# Where do MMO's go from here?
+# Where do MMO's go from here? And why I think MnM will succumb to the same fate as EQ2
 
-The reason I am writing this is because I am genuinely concerned for my favorite and personally most anticipated old-school-like MMORPG, *Monsters & Memories*. I played a playtest in early 2025, and then got into the PvP beta a few days ago. I also have a lot of experience in EQ2 (I'm talking 2004-2005 era EQ2, not post LU24 that most seems to be familiar with. Pre-LU24 EQ2 was essentially like EQ when it came to dangerous world, grouping, travelling being a time commitment, corpse runs, etc. It was all there. EQ1, and now that same fate is already rearing its ugly face in MnM and we're still in closed beta.
+*It's a long title. It's a lot to take in. We have enough data on MnM and MMO's over the past two decades to see the same pattern repeating itself.*
+
+## What's the point?
+
+The reason I am writing this is because I am genuinely concerned for my favorite and personal most anticipated old-school-like MMORPG, *Monsters & Memories*.
+
+I played a stress play test weekend in early 2025 (which was more like an Alpha), and then got into the PvP beta a few days ago. I also have a lot of experience in EQ2. Pre-LU24 EQ2 was essentially like EQ when it came to dangerous world, grouping, travelling being a time commitment, corpse runs, needing other players, etc. It was all there in some capacity. Yes, it was toned down a bit: death resulted in experience debt, not experience loss, and you kept your items on your body, not left on your corpse. Since it was experience debt and not loss, you could never lose a level. The risk was still there because experience debt means you gained experience at a 50% reduced race, until that experience debt was paid off. You could pay a portion (most) of the debt back by reclaiming your corpse which appeared as a ghostly apparition in the world with a  if you didn't go back and get your corpse, you had to level back through all that experience debt just to get back to where you were, so corpse runs were alive and well, just a little different. I do have experience with TLP EQ but I am in no way able to speak on EQ as I am able to EQ2 pre-LU24. I do knot enough about the original game and the overall formula to at least *talk on it* I feel at least.
+
+Both EQ and EQ2 succumbed to the same fate under the hood. The inability to reliably find groups results in people just quitting the game. This was the ultimate demise of EQ2 that led up to LU24 and transformed it into a solo-friendly theme park MMO.
+
+And now that same fate is already rearing its ugly face in MnM and we're still in closed beta. I have felt this myself, as well as others who have expressed these same concerns in their YouTube videos.
 
 They are taking everything EverQuest did, and putting it on a modern face. Everything you remembered from EQ is there. Anybody who plays it will literally tells you they feel like they're literally reliving 1999 all over again.
 
