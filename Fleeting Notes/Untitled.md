@@ -25,9 +25,9 @@ I do have experience with TLP EQ so when I talk about EQ I'm talking from what I
 
 ## So, why am I concerned?
 
-Both EQ and EQ2 succumbed to the same fate under the hood. The inability to reliably find groups results in people just quitting the game. This was the ultimate demise of EQ2 that led up to LU24 and transformed it into a solo-friendly theme park MMO. It was the reason why I quit at level 42, and never finished off my level 50 grind until months later after guildies started carrying me. They even just brought me to a level 50 raid at like level 45 because, why not? "Can he at least zone in?" Yep. "Let's take him."
+Both EQ and EQ2 succumbed to the same fate under the hood. The inability to reliably find groups results in people just quitting the game. This was the ultimate demise of EQ2 that led up to LU24 and transformed it into a solo-friendly theme park MMO. It was the reason why I quit at level 42, and never finished off my level 50 grind until months later after guildies started carrying me. They even just brought me to a level 50 raid at like level 45 because, why not? "Can he at least zone in?" Yep. "Let's take him." I raise my concerns because the developers of MnM are set in their mind that they want a faithful 1:1 re-creation of EQ. The problem is, a faithful 1:1 re-creation of EQ will fail no matter how many different coats of paint you plaster on it. Some decisions were made because developers simply didn't know any better, not because it is "good design".
 
-The problem isn't the gameplay loop, it's that there are no systems that fill the gap between I just logged in and want to do something to progress, and great I found a group, now it's time to get some real experience and loot. The solution isn't to dumb down the game and turn it into a solo game, but it's to make services and let me make it very specific: an in-game service the player pays in-game gold for, ***NOT*** a RMT service that costs additional real money. Get the greed out of your heads. The idea is to give the player less-capable computer-controlled party members to play with - pets if you will. As soon as the player is invited to a group, the pets  are disbanded. It's not an always on while out of a group, off when in a group type of thing. You'd pay a vendor X amount of gold for X amount of time, for a maximum amount of time that the adventurers can be at your disposal for, at which when the timer ends, they say they have other duties they must tend to, and runs off and despawns, and lets you know to speak to the vendor again if you need more comrades.
+The problem isn't the gameplay loop, it's that there are no systems that fill the gap between logging in and actually having fun and progressing your character. The solution isn't to dumb down the game and turn it into a solo game, but it's to make services and let me make it very specific: an in-game service the player pays in-game gold for, ***NOT*** a RMT service that costs additional real money. Get the greed out of your heads. The idea is to give the player less-capable computer-controlled party members to play with - pets if you will. As soon as the player is invited to a group, the pets  are disbanded and any time paid up front for is refunded. It's not an always on while out of a group, off when in a group type of thing. You'd pay a vendor X amount of gold for X amount of time, for a maximum amount of time that the adventurers can be at your disposal for, at which when the timer ends, they say they have other duties they must tend to, and runs off and despawns, and lets you know to speak to the vendor again if you need more comrades.
 
 They should have constraints of course:
 - party companions are never as powerful as real players
@@ -38,11 +38,15 @@ They should have constraints of course:
 	- dungeon camps shall still require a party of real players
 	- bigger, tougher elite ourdoors camps shall still require real players
 
-The idea is to gap the bridge between "I'm sitting in Freeport browsing reddit while I wait for a group invite because I can't progress otherwise" and "I've found a group". It shall bridge the gap between "I'm stuck at level 9" and "I'll just grab some computer companions and go farm some skellies at the graveyard". Now you can do the latter while you look for a group.
+Nobody should ever have to log out of a game they're paying $15/month for when they want to play because they literally can't. I remember doing this in EQ, I rem
 
-EQ eventually added a system specifically for this called the Mercenaries system.
+EQ eventually added a Mercenary system to solve this same dilemma. Design choices in 1999 were made because developers didn't know any better, not because it was good design. The intentional decisions should say:
+- dangerous world
+- requires help from others
+- travel has commitment
+- death has consequences
 
-I just could not find groups.
+By adding Mercenaries, computer companions, AI group members -- it doesn't matter how you frame it. It doesn't take anything away from the four core concepts that make EQ what it is.
 
 When I dig into my memory archive and really think about what my experience was like in EQ2, it started out amazing. Just like MnM the group play was perfect. You felt tiny in a huge, dangerous world. As soon as you stepped off the docks in Nektulos Forest or The Enchanted Lands, you instantly felt this feel of dread as you walked about 50 yards off the docks and saw your first mob - you press `TAB`, and you look at the target frame. It reads "Heroic", and with `^^^`, meaning it is fully intended for a full group of 6, with a tank, healer, DPS, and support.
 
