@@ -13,9 +13,27 @@ status: inbox
 
 The reason I am writing this is because I am genuinely concerned for my favorite and personal most anticipated old-school-like MMORPG, *Monsters & Memories*.
 
-I played a stress play test weekend in early 2025 (which was more like an Alpha), and then got into the PvP beta a few days ago. I also have a lot of experience in EQ2. Pre-LU24 EQ2 was essentially like EQ when it came to dangerous world, grouping, travelling being a time commitment, corpse runs, needing other players, etc. It was all there in some capacity. Yes, it was toned down a bit: death resulted in experience debt, not experience loss, and you kept your items on your body, not left on your corpse. Since it was experience debt and not loss, you could never lose a level. The risk was still there because experience debt means you gained experience at a 50% reduced race, until that experience debt was paid off. You could pay a portion (most) of the debt back by reclaiming your corpse which appeared as a ghostly apparition in the world with a  if you didn't go back and get your corpse, you had to level back through all that experience debt just to get back to where you were, so corpse runs were alive and well, just a little different. I do have experience with TLP EQ but I am in no way able to speak on EQ as I am able to EQ2 pre-LU24. I do knot enough about the original game and the overall formula to at least *talk on it* I feel at least.
+I played a stress play test weekend in early 2025 (which was more like an Alpha), and then got into the PvP beta a few days ago. I also have a lot of experience in EQ2. Pre-LU24 EQ2 was essentially like EQ when it came to dangerous world, grouping, travelling being a time commitment, corpse runs, needing other players, etc. It was all there in some capacity. EQ2 shipped with many EQ mechanics toned down.
 
-Both EQ and EQ2 succumbed to the same fate under the hood. The inability to reliably find groups results in people just quitting the game. This was the ultimate demise of EQ2 that led up to LU24 and transformed it into a solo-friendly theme park MMO.
+- death resulted in experience debt, not experience loss
+- you kept your items on your body, not left on your corpse
+- since it was experience debt and not loss, you could never lose a level
+
+The risk was still there because experience debt means you gained experience at a 50% reduced rate, until that experience debt was paid off. You could pay a portion (most) of the debt back by reclaiming your corpse which appeared as a ghostly apparition in the world with a waypoint to it. There would still be some penalty there as you could not recover 100% of your experience debt. It was something like 90-95%.
+
+I do have experience with TLP EQ so when I talk about EQ I'm talking from what I experienced with the builds I played with back in 2021, and just from what I know is different in live compared to the original 1999 exerience.
+
+## So, why am I concerned?
+
+Both EQ and EQ2 succumbed to the same fate under the hood. The inability to reliably find groups results in people just quitting the game. This was the ultimate demise of EQ2 that led up to LU24 and transformed it into a solo-friendly theme park MMO. It was the reason why I quit at level 42, and never finished off my level 50 grind until months later after guildies started carrying me. They even just brought me to a level 50 raid at like level 45 because, why not? "Can he at least zone in?" Yep. "Let's take him."
+
+The problem isn't the gameplay loop, it's that there are no systems that fill the gap between I just logged in and want to do something to progress, and great I found a group, now it's time to get some real experience and loot. The solution isn't to dumb down the game and turn it into a solo game, but it's to g
+
+I just could not find groups.
+
+When I dig into my memory archive and really think about what my experience was like in EQ2, it started out amazing. Just like MnM the group play was perfect. You felt tiny in a huge, dangerous world. As soon as you stepped off the docks in Nektulos Forest or The Enchanted Lands, you instantly felt this feel of dread as you walked about 50 yards off the docks and saw your first mob - you press `TAB`, and you look at the target frame. It reads "Heroic", and with `^^^`, meaning it is fully intended for a full group of 6, with a tank, healer, DPS, and support.
+
+It is the most memorable experiences I have *ever* had playing video games.
 
 And now that same fate is already rearing its ugly face in MnM and we're still in closed beta. I have felt this myself, as well as others who have expressed these same concerns in their YouTube videos.
 
