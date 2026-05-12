@@ -2,9 +2,11 @@
 
 ## Overview
 
-- Semaphore Concepts Server
-	- Feature in Semaphore 5.8+ that uses MarkLogic Server as its backend to store and serve semantic models, improving query performance, and enables downstream systems to access models via JSON objects or GraphQL.
-	- Does not require a MarkLogic backend REST API server.
+- Semaphore Concepts Service
+	- Feature in **Semaphore 5.8+** that uses MarkLogic Server as its backend to store and serve semantic models, improving query performance, and enables downstream systems to access models via JSON objects or GraphQL.
+	- Provides a highly-available read-only version of the published models
+	- Provides similar functionality as Semantic Enhancement Server (SES), but is not a drop-in replacement due to the two API's not being the same.
+	- SCS API is available via **REST API calls** and **GraphQL**.
 - MarkLogic Flux
 	- Tool that can load and classify data by communicating with Semaphore while importing that automatically assigns tags/categories to documents as they are ingested into MarkLogic.
 -  Semantic Metadata Hub
