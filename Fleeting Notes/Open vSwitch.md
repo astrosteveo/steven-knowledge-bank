@@ -1,5 +1,46 @@
 # Open vSwitch
 
+## Archived CentOS NFV OpenvSwitch Repo
+
+```text
+# CentOS-NFV-OpenvSwitch.repo
+#
+# Please see http://wiki.centos.org/SpecialInterestGroup/NFV for more
+# information
+
+[centos-nfv-openvswitch]
+name=CentOS-$releasever - NFV OpenvSwitch
+baseurl=http://vault.centos.org/centos/$nfvsigdist/nfv/$basearch/openvswitch-2/
+#mirrorlist=http://#mirrorlist.centos.org/?release=$nfvsigdist&arch=$basearch&repo=nfv-openvswitch-2
+gpgcheck=1
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-NFV
+module_hotfixes=1
+
+[centos-nfv-openvswitch-testing]
+name=CentOS-$releasever - NFV OpenvSwitch Testing
+baseurl=http://buildlogs.centos.org/centos/$nfvsigdist/nfv/$basearch/openvswitch-2/
+gpgcheck=0
+enabled=0
+module_hotfixes=1
+
+[centos-nfv-openvswitch-debuginfo]
+name=CentOS-$releasever - NFV OpenvSwitch - Debug
+baseurl=http://debuginfo.centos.org/centos/$nfvsigdist/nfv/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-NFV
+module_hotfixes=1
+
+[centos-nfv-openvswitch-source]
+name=CentOS-$releasever - NFV OpenvSwitch - Source
+baseurl=http://vault.centos.org/centos/$releasever/nfv/Source/openvswitch-2/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-NFV
+module_hotfixes=1
+```
+
 ## Installation
 
 1. Pull down the RPM's from some repo (likely just upload the RPM's to Nexus and pull them from there).
