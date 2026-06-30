@@ -9,7 +9,6 @@ title: Design Doc
 date created: Friday, June 26th 2026, 10:41:11 am
 date modified: Friday, June 26th 2026, 11:31:01 am
 ---
-
 # Design Doc
 
 Here’s a generic, fill‑in‑the‑blanks template you can reuse for new projects. It’s structured like the metrics-dashboard doc, but stripped of domain specifics.
